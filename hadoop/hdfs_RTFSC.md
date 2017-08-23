@@ -250,7 +250,11 @@ export HADOOP_NAMENODE_OPTS="-Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPT
     -Dcom.sun.management.jmxremote.port=10000 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 ```
 
-### dfs.http.port端口(tcp#50070)
+### dfs.http.port端口(tcp#50070)和/dfs.datanode.http.address端口(tcp#50075).
+
+```
+# src/hdfs/org/apache/hadoop/hdfs/DFSConfigKeys.java
+```
 
 
 
