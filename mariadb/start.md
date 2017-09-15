@@ -103,3 +103,12 @@ mysql -S /home/grakra/data/mysql/sock
 ```
 ## 3. running TPC-C benchmark and generating flumegraph.
 
+[**tpcc-mysql**](https://github.com/Percona-Lab/tpcc-mysql)
+
+```
+mysqladmin -S /home/grakra/data/mysql/sock -uroot create tpcc1000
+
+mysql -S /home/grakra/data/mysql/sock -uroot tpcc1000 < create_table.sql
+
+./tpcc_load -h127.0.0.1 -d tpcc1000 -u root -p "" -w 1000
+```
