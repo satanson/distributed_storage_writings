@@ -127,5 +127,11 @@ google-chrome-stable mysql.svg
 ## 4. A priori knowledge and guessing
 
 **fact**
-- disk-based and persistent=> call fsync when write WAL log and checkpoint
+- disk-based and persistent=> call fsync when write WAL log and checkpoint.[must]
+- support several engine=> separated WAL and engine. [maybe]
+- consist of local store, txn CC, process model, query module, buffer pool, catalog, protocol and etc.=> start local store first.
+
+## 5. Ag for fsync
+
+
 
