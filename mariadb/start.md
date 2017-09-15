@@ -15,9 +15,18 @@ make -j8
 
 ## 2. start mysqld
 
-```
-write ~/.my.cnf
-```
+[**running-mariadb-from-the-build-directory**](https://mariadb.com/kb/en/library/running-mariadb-from-the-build-directory/)
+
+**write ~/.my.cnf**
+
+- datadir=/home/grakra/data/mysql
+- socket=/home/grakra/data/mysql/sock
+- language=/home/grakra/workspace/mariadb/server/sql/share/english
+- log-error=/home/grakra/data/mysql/error.log
+- general-log=TRUE
+- general-log-file=/home/grakra/data/mysql/general.log
+- slow-query-log=TRUE
+- slow-query-log-file=/home/grakra/data/mysql/slow.log
 
 ```
 # Example mysql config file.
@@ -83,5 +92,11 @@ no-auto-rehash
 
 [myisamchk]
 set-variable= key_buffer=128M
+```
+
+```
+./scripts/mysql_install_db --srcdir=$PWD --datadir=/home/grakra/data/mysql --user=$LOGNAME
+
+sql/mysqld
 ```
 
