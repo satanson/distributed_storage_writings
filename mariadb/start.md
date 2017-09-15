@@ -98,5 +98,8 @@ set-variable= key_buffer=128M
 ./scripts/mysql_install_db --srcdir=$PWD --datadir=/home/grakra/data/mysql --user=$LOGNAME
 
 sql/mysqld
+
+mysql -S /home/grakra/data/mysql/sock
 ```
+## 3. running TPC-C benchmark and generating flumegraph.
 
