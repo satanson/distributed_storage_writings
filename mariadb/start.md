@@ -123,3 +123,9 @@ perf script > out.perf
 ./stackcollapse-perf.pl ../tpcc-mysql/out.perf |./flamegraph.pl >mysql.svg
 google-chrome-stable mysql.svg
 ```
+
+## 4. A priori knowledge and guessing
+
+**fact**
+- disk-based and persistent=> call fsync when write WAL log and checkpoint
+
