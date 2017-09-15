@@ -112,3 +112,14 @@ mysql -S /home/grakra/data/mysql/sock -uroot tpcc1000 < create_table.sql
 
 ./tpcc_load -h127.0.0.1 -d tpcc1000 -u root -p "" -w 1000
 ```
+
+meanwhile
+
+[**FlameGraph**](https://github.com/brendangregg/FlameGraph)
+
+```
+perf record -F 99 -p $(ps h -C mysqld -o pid) -g -- sleep 60
+perf script > out.perf
+./stackcollapse-perf.pl ../tpcc-mysql/out.perf |./flamegraph.pl >mysql.svg
+google-chrome-stable mysql.svg
+```
