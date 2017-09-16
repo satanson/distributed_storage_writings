@@ -176,3 +176,7 @@ generate-core-file mysqld_core.23372
 #12 0x00007f80c6ee2049 in start_thread () from /usr/lib/libpthread.so.0
 #13 0x00007f80c42b7f0f in clone () from /usr/lib/libc.so.6
 ```
+
+```
+gdb --batch --quiet -ex "thread apply all bt" -ex "quit" sql/mysqld mysqld_core.23372
+```
