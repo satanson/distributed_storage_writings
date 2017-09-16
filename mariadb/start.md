@@ -133,5 +133,7 @@ google-chrome-stable mysql.svg
 
 ## 5. Ag for fsync
 
+## 6. gdb
+
 
 
