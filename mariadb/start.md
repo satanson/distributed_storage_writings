@@ -135,5 +135,11 @@ google-chrome-stable mysql.svg
 
 ## 6. gdb
 
+```
+su
+echo 0 > /proc/sys/kernel/yama/ptrace_scope
+exit
 
-
+gdb sql/mysqld 23372
+br fsync
+```
