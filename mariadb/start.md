@@ -136,10 +136,43 @@ google-chrome-stable mysql.svg
 ## 6. gdb
 
 ```
+# enable gdb to attach to a process
 su
 echo 0 > /proc/sys/kernel/yama/ptrace_scope
 exit
 
+# hunt for fsync
 gdb sql/mysqld 23372
 br fsync
+c
+bt
+generate-core-file mysqld_core.23372
+```
+```
+#0  0x00007f80c6eebc60 in fsync () from /usr/lib/libpthread.so.0
+#1  0x00005649da40ecaa in os_file_fsync_posix (file=10)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/os/os0file.cc:2426
+#2  0x00005649da40f0d3 in os_file_flush_func (file=10)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/os/os0file.cc:2542
+#3  0x00005649da65b789 in pfs_os_file_flush_func (file=..., 
+    src_file=0x5649dab77360 "/home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc", src_line=962)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/include/os0file.ic:496
+#4  0x00005649da65f2e2 in fil_flush_low (space=0x5649dc5b4e90)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc:962
+#5  0x00005649da66d53c in fil_flush (space_id=4294967280)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc:5528
+#6  0x00005649da3ec138 in log_write_flush_to_disk_low ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1063
+#7  0x00005649da3ecb92 in log_write_up_to (lsn=9832047807, flush_to_disk=true)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1291
+#8  0x00005649da3ecd05 in log_buffer_sync_in_background (flush=true)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1337
+#9  0x00005649da50cf66 in srv_sync_log_buffer_in_background ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2127
+#10 0x00005649da50d4b1 in srv_master_do_active_tasks ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2300
+#11 0x00005649da50ddea in srv_master_thread (arg=0x0)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2511
+#12 0x00007f80c6ee2049 in start_thread () from /usr/lib/libpthread.so.0
+#13 0x00007f80c42b7f0f in clone () from /usr/lib/libc.so.6
 ```
