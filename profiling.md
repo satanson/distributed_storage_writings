@@ -1,6 +1,7 @@
 # gperftools & gprof
 
-## [gperftools](https://github.com/gperftools/gperftools)
+
+## gprof
 
 - CXXFLAGS `-lprofiler`
 
@@ -9,4 +10,13 @@ g++ -g -O0 -rdynamic -fno-inline -Wall -Wno-error -std=c++0x -static -L out-stat
 ```
 - ./demo
 
+- gprof demo gmon.out > report.dat
+
 - [**gprof2dot**](https://github.com/jrfonseca/gprof2dot)
+
+```
+gprof2dot  report.dat |dot -Tsvg -o output.svg
+```
+
+## [gperftools](https://github.com/gperftools/gperftools)
+
