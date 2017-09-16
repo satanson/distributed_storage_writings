@@ -185,6 +185,17 @@ gdb --batch --quiet -ex "thread apply all bt" -ex "quit" sql/mysqld mysqld_core.
 ./stackcollapse-gdb.pl ../mariadb/server/mysqld_gdb_stacktrace.dat |./flamegraph.pl > mysqld_fsync.svg
 ```
 
+```
+pip install gprof2dot
+```
+
+```
+./stacktrace2callgraph_gdb.pl ~/workspace/mariadb/server/mysqld_gdb_stacktrace.dat  |gprof2dot -c print | dot -Tpng -o mysqld_fsync.png
+```
+
+
+![image](mysqld_fsync.png)
+
 **draw callgraph**
 
 [**pprof**](https://github.com/google/pprof)
