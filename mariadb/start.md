@@ -235,10 +235,22 @@ pip install gprof2dot
 
 > 
 - reclaim unused threads?
-- can the number of thread scale as requests grows?
+- can the number of thread scales up as requests grows?
 - catogory threads into daemon and non-daemon ones?
 - the threads associated with a client session and threads for I/O should be non-daemon threads.
-- 
+- process model and thread pool management.
+
+- `binlog_background_thread`
+
+> 
+- record binlog
+- is binlog is WAL log?
+
+- `handle_slave_background`
+
+> 
+- for replication?
+
 
 
 **in component perspective**
