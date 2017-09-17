@@ -341,6 +341,12 @@ pip install gprof2dot
 
 - mysql architecture
 
+>
+- 1979, Monty Widenius, TcX, reporting tool written in BASIC, ran on 4Mhz computer with 16KB RAM.
+
+- , Unireg, rewritten in C and portted to UNIX, low-level storage engine with a reporting front end.
+
+- 1990s, push for SQL interface. 1. load data into a commercial database. 2. borrowing the SQL part from mSQL and integrated with low-level storage engine. 
 
 ##
 
