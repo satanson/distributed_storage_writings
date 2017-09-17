@@ -333,8 +333,14 @@ pip install gprof2dot
 
 **in component perspective**
 
-**main component of RDBMS**
+- main component of RDBMS
+
 ![image](./main_component.png)
+
+`Hellerstein, J. M., Stonebraker, M., & Hamilton, J. (2007). Architecture of a database system. Foundations and Trends® in Databases, 1(2), 141-259.`
+
+- mysql architecture
+
 
 ##
 
