@@ -294,7 +294,22 @@ pip install gprof2dot
 - monitor non-error thread
 - why not to unit `srv_error_monitor_thread` and `srv_monitor_thread` into one thread?
 
- 
+- `lock_wait_timeout_thread`
+
+> 
+- for deadlock?
+
+- `fts_optimzed_thread`
+
+> 
+-  unknown
+
+- `dict_stats_thread`
+
+> 
+- unknown
+- catalog
+
 
 
 **in component perspective**
