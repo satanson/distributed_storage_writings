@@ -251,6 +251,50 @@ pip install gprof2dot
 > 
 - for replication?
 
+- `buf_resize_thread`
+
+> 
+- resize the buffer pool to avoid OOM?
+- policy?
+- in-the-fly?
+
+- `buf_dump_thread`
+
+> 
+- why dump buf?
+- for debug propose?
+- for checkpointing propose?
+
+ 
+
+- `srv_purge_coodinator_thread`
+
+> 
+- unknown?
+
+- `srv_worker_thread`
+
+> 
+- unknown?
+
+- `btr_defragment_thread`
+
+> 
+- btr means B tree?
+- defragment what?
+
+- `srv_error_monitor_thread`
+
+> 
+- monitor error event
+
+- `srv_monitor_thread`
+
+> 
+- monitor non-error thread
+- why not to unit `srv_error_monitor_thread` and `srv_monitor_thread` into one thread?
+
+ 
 
 
 **in component perspective**
