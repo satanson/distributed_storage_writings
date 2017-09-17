@@ -210,10 +210,13 @@ pip install gprof2dot
 
 - `handle_one_connection`
 
->
-- `my_net_read_packet`: 
+> 
+- each client has a corresponding `handle_one_connection` thread for communication.
+- `my_net_read_packet`: recv req message from clients
+- process cmd
+- send resp message to clients
 
-
+- 
 
 **in component perspective**
 
