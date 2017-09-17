@@ -331,10 +331,10 @@ pip install gprof2dot
 > 
 - process signal
 
-
-
 **in component perspective**
 
+**main component of RDBMS**
+![image](./main_component.png)
 
 ##
 
