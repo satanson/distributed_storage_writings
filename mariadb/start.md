@@ -357,7 +357,10 @@ pip install gprof2dot
 - Apr 2000, , Slashdot, master-slave replication, ISAM(non-txn)->MyISAM(txn), full-text search. Gemini(transactional engine, ended in a lawsuit towards the end of 2001).
 - Oct 2001, MySQL4.0 alpha,  MySQL/InnoDB, Heikki Tuuri, InnoDB, row-level locking.
 - early 2002, MySQL/InnoDB, stable.
-- Mar 2003, MySQL4.0 production stable.
+- Mar 2003, MySQL4.0 production stable, query cache, replication code on the slave was rewritten to use two threads, one for network I/O from master, the other to process updates. optimizer improvements. client/server protocol become SSL-capable.
+
+
+ 
 
 
 
