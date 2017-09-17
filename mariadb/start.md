@@ -216,7 +216,21 @@ pip install gprof2dot
 - process cmd
 - send resp message to clients
 
-- 
+- `io_handler_thread`
+
+> 
+- *aio for network|disk ?*
+
+
+- `buf_flush_page_cleaner_coordinator`
+
+> 
+- manage buffer pool?
+- flush dirty pages to disk
+- swap pre-fetching or on-command pages from disk.
+- evict LRU pages.
+
+
 
 **in component perspective**
 
