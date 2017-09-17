@@ -358,9 +358,15 @@ pip install gprof2dot
 - Oct 2001, MySQL4.0 alpha,  MySQL/InnoDB, Heikki Tuuri, InnoDB, row-level locking.
 - early 2002, MySQL/InnoDB, stable.
 - Mar 2003, MySQL4.0 production stable, query cache, replication code on the slave was rewritten to use two threads, one for network I/O from master, the other to process updates. optimizer improvements. client/server protocol become SSL-capable.
+- April 2003, MySQL4.1 alpha,
+- June 2004, MySQL4.1 beta, subqueries, spatial indexing support was added to MyISAM. Unicode support. more secure client/server protocol. supported prepared statements.
+- Oct 2004, MySQL4.1 stable.
+- Dec 2003, MySQL5.0 alpha, stored procedures, server-side curosrs, tiggers, views, XA -transactions, query optimizer improvement
+- Oct 2005, MySQL5.0 stable.
+- Nov 2005, MySQL5.1 alpha, table data partitioning, row-based replication, event scheduler, standardized plug-in API that facilitates the integration of new storage engines and other plugins.
 
+- 5.0: stable, 5.1: beta, 5.2:new features.
 
- 
 
 
 
