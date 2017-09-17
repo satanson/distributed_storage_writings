@@ -133,6 +133,9 @@ google-chrome-stable mysql.svg
 
 ## 5. Ag for fsync
 
+- source code search is not a good way.
+- so use gdb.
+
 ## 6. gdb
 
 ```
@@ -193,10 +196,6 @@ pip install gprof2dot
 ./stacktrace2callgraph_gdb.pl ~/workspace/mariadb/server/mysqld_gdb_stacktrace.dat  |gprof2dot -c print | dot -Tpng -o mysqld_fsync.png
 ```
 
-
 ![image](mysqld_fsync.png)
 
-**draw callgraph**
-
-[**pprof**](https://github.com/google/pprof)
-
+## 7. threads and stacktrace analysis
