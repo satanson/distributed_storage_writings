@@ -311,8 +311,30 @@ pip install gprof2dot
 - catalog
 
 
+- `ma_checkpoint_thread`
+
+> 
+- checkpointing?
+
+- `srv_master_thread`
+
+> 
+- write WAL?
+
+- `timer_handler`
+
+> 
+- timer notification
+
+- `signal_hand`
+
+> 
+- process signal
+
+
 
 **in component perspective**
 
 
 ##
+
