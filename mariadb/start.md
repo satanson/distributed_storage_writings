@@ -350,8 +350,9 @@ pip install gprof2dot
 
 - May 1996, MySQL1.0, released to a limited group.
 - Oct 1996, MySQL 3.11.1, public release, only a binary distribution for solaris.
-- 1997~1999, portted to other OS as feature set gradually increased.
- 
+- 1997~1998, portted to other OS as feature set gradually increased.
+- 1998, MySQL MySQL 3.22,  features. 1. a decent subset of SQL lang, 2. sophisticated optimizer, 3. extremely fast, 4. vary stable. 5. multi-lang support. lacked support: 1. transactions, 2. subquery, 3. foreign keys, 4. stored procedures & views, only table-level locking. 
+- 1999~2000, MySQL 3.23, MySQL AB and SleepyCat, SQL interface for Berkeley DB.
 
 ##
 
