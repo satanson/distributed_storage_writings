@@ -200,10 +200,22 @@ pip install gprof2dot
 
 ## 8. mariadb architecture
 
-- in thread perspective
+**in thread perspective**
+
+- `mysqld_main`
+
+> 
+- main thread
+- handle_connections_sockets:  listen and accept connection request from clients.
+
+- `handle_one_connection`
+
+>
+- `my_net_read_packet`: 
 
 
-- in component perspective
+
+**in component perspective**
 
 
 ##
