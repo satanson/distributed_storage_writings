@@ -354,6 +354,11 @@ pip install gprof2dot
 - 1998, MySQL MySQL 3.22,  features. 1. a decent subset of SQL lang, 2. sophisticated optimizer, 3. extremely fast, 4. vary stable. 5. multi-lang support. lacked support: 1. transactions, 2. subquery, 3. foreign keys, 4. stored procedures & views, only table-level locking. 
 - 1999~2000, MySQL 3.23, MySQL AB and SleepyCat, SQL interface for Berkeley DB. could never work out all the quirks of the BDB interface, and the BDB tables was never stable. MySQL source became equipped with hooks to add any type of storage engine, including transacional one.
 
+- Apr 2000, , Slashdot, master-slave replication, ISAM(non-txn)->MyISAM(txn), full-text search. Gemini(transactional engine, ended in a lawsuit towards the end of 2001).
+- Oct 2001, MySQL4.0 alpha,  MySQL/InnoDB, Heikki Tuuri, InnoDB, row-level locking.
+- early 2002, MySQL/InnoDB, stable.
+- Mar 2003, MySQL4.0 production stable.
+
 
 
 ##
