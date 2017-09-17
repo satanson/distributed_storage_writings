@@ -231,6 +231,15 @@ pip install gprof2dot
 - evict LRU pages.
 
 
+- `thd_destructor_proxy`
+
+> 
+- reclaim unused threads?
+- can the number of thread scale as requests grows?
+- catogory threads into daemon and non-daemon ones?
+- the threads associated with a client session and threads for I/O should be non-daemon threads.
+- 
+
 
 **in component perspective**
 
