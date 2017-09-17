@@ -198,4 +198,12 @@ pip install gprof2dot
 
 ![image](mysqld_fsync.png)
 
-## 7. threads and stacktrace analysis
+## 8. mariadb architecture
+
+- in thread perspective
+
+
+- in component perspective
+
+
+##
