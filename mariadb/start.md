@@ -348,6 +348,9 @@ pip install gprof2dot
 
 - 1990s, push for SQL interface. 1. load data into a commercial database. 2. borrowing the SQL part from mSQL and integrated with low-level storage engine. 3. "I've had enough of those tools that somebody else wrote that don't work! I'm writing my own".
 
+- May 1996, MySQL1.0, released to a limited group.
+- Oct 1996, MySQL 3.11.1, public release, only a binary distribution for solaris.
+- 1997~1999, portted to other OS as feature set gradually increased.
  
 
 ##
