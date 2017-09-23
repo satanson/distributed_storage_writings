@@ -455,6 +455,15 @@ mysql> select @@debug;
 mysql> show variables likes "debug";
 mysql> show  variables where Variable_name ="debug";
 
+# print process ID, line number.
+# enable trace and debug
+# redirect to /home/grakra/mysqld.trace, flush between each write
+# only output info associated with functions matched with ha_tina::rnd_init
+mysql> set debug = 'i:t:d:N:O,/home/grakra/mysqld.trace:f,ha_tina\:\:rnd_init';
+
+# also print file name and line number of source file.
+mysql> set debug = 'i:t:d:N:F:L:r:O,/home/grakra/mysqld.trace:f,ha_tina*,handler*,handlerton*';
+
 ```
 
 
