@@ -1,0 +1,341 @@
+T@1    :     1:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :     2:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/plugin  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :     3:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :     4:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065d1f56e8) locking
+T@1    :     5:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065d1f56e8) locked
+T@1    :     6:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065d1f56e8) unlocking
+T@1    :     7:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :     8:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :     9:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    10:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    11:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    12:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :    13:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@16   :     1:     handler.cc:  2457: | | | | | | | >handler::ha_open
+T@16   :     2:     handler.cc:  2461: | | | | | | | | enter: name: ./mysql/gtid_slave_pos  db_type: 12  db_stat: 33  mode: 2  lock_test: 18
+T@16   :     3:     handler.cc:  2466: | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@16   :     4:     handler.cc:  2514: | | | | | | | <handler::ha_open
+T@16   :     5:     handler.cc:  5828: | | | | | | | >handler::ha_external_lock
+T@16   :     6:     handler.cc:  5897: | | | | | | | <handler::ha_external_lock
+T@16   :     7:     handler.cc:  2541: | | >handler::ha_rnd_next
+T@16   :     8:     handler.cc:  2561: | | <handler::ha_rnd_next
+T@16   :     9:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@16   :    10:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :    14:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    15:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/servers  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    16:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    17:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db5a198) locking
+T@1    :    18:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db5a198) locked
+T@1    :    19:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db5a198) unlocking
+T@1    :    20:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    21:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    22:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    23:     handler.cc:  2541: | | | | >handler::ha_rnd_next
+T@1    :    24:     handler.cc:  2561: | | | | <handler::ha_rnd_next
+T@1    :    25:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :    26:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :    27:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    28:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/user  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    29:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    30:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db67e18) locking
+T@1    :    31:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db67e18) locked
+T@1    :    32:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db67e18) unlocking
+T@1    :    33:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    34:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    35:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/db  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    36:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    37:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db78658) locking
+T@1    :    38:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db78658) locked
+T@1    :    39:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db78658) unlocking
+T@1    :    40:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    41:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    42:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/host  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    43:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    44:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db88708) locking
+T@1    :    45:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db88708) locked
+T@1    :    46:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db88708) unlocking
+T@1    :    47:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    48:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    49:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/proxies_priv  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    50:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    51:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db95b58) locking
+T@1    :    52:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db95b58) locked
+T@1    :    53:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db95b58) unlocking
+T@1    :    54:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    55:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :    56:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/roles_mapping  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :    57:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :    58:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065dba3b28) locking
+T@1    :    59:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065dba3b28) locked
+T@1    :    60:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065dba3b28) unlocking
+T@1    :    61:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :    62:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    63:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    64:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    65:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    66:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    67:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    68:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    69:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    70:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :    71:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :    72:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    73:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    74:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    75:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    76:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    77:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    78:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    79:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    80:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    81:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    82:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    83:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    84:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    85:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    86:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    87:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    88:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    89:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    90:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    91:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    92:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    93:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    94:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    95:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    96:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    97:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :    98:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :    99:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :   100:     handler.cc:  2541: | | | >handler::ha_rnd_next
+T@1    :   101:     handler.cc:  2561: | | | <handler::ha_rnd_next
+T@1    :   102:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   103:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   104:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   105:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   106:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   107:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   108:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   109:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   110:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   111:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   112:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   113:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/time_zone_leap_second  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   114:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   115:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dbbcdf8) locking
+T@1    :   116:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dbbcdf8) locked
+T@1    :   117:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dbbcdf8) unlocking
+T@1    :   118:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   119:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   120:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/time_zone_name  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   121:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   122:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dbc9ab8) locking
+T@1    :   123:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dbc9ab8) locked
+T@1    :   124:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dbc9ab8) unlocking
+T@1    :   125:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   126:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   127:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/time_zone  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   128:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   129:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dbd2038) locking
+T@1    :   130:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dbd2038) locked
+T@1    :   131:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dbd2038) unlocking
+T@1    :   132:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   133:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   134:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/time_zone_transition_type  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   135:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   136:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dbd99c8) locking
+T@1    :   137:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dbd99c8) locked
+T@1    :   138:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dbd99c8) unlocking
+T@1    :   139:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   140:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   141:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/time_zone_transition  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   142:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   143:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dbe2658) locking
+T@1    :   144:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dbe2658) locked
+T@1    :   145:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dbe2658) unlocking
+T@1    :   146:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   147:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   148:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   149:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   150:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   151:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   152:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   153:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   154:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   155:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   156:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   157:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   158:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   159:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   160:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   161:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   162:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   163:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   164:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   165:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   166:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   167:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :   168:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/tables_priv  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   169:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   170:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065db669a8) locking
+T@1    :   171:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065db669a8) locked
+T@1    :   172:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065db669a8) unlocking
+T@1    :   173:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :   174:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :   175:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/columns_priv  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   176:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   177:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065dbdeff8) locking
+T@1    :   178:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065dbdeff8) locked
+T@1    :   179:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065dbdeff8) unlocking
+T@1    :   180:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :   181:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@1    :   182:     handler.cc:  2461: | | | | | | | | | enter: name: ./mysql/procs_priv  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   183:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   184:     handler.cc:   238: | | | | | | | | | mutex: share->LOCK_share (0x56065dbf1b18) locking
+T@1    :   185:     handler.cc:   399: | | | | | | | | | mutex: share->LOCK_share (0x56065dbf1b18) locked
+T@1    :   186:     handler.cc:   407: | | | | | | | | | mutex: share->LOCK_share (0x56065dbf1b18) unlocking
+T@1    :   187:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@1    :   188:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :   189:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :   190:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :   191:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :   192:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :   193:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :   194:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   195:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   196:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   197:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   198:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   199:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   200:     handler.cc:  2457: | | | | | | >handler::ha_open
+T@1    :   201:     handler.cc:  2461: | | | | | | | enter: name: ./mysql/func  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   202:     handler.cc:  2466: | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   203:     handler.cc:   238: | | | | | | | mutex: share->LOCK_share (0x56065dc02cb8) locking
+T@1    :   204:     handler.cc:   399: | | | | | | | mutex: share->LOCK_share (0x56065dc02cb8) locked
+T@1    :   205:     handler.cc:   407: | | | | | | | mutex: share->LOCK_share (0x56065dc02cb8) unlocking
+T@1    :   206:     handler.cc:  2514: | | | | | | <handler::ha_open
+T@1    :   207:     handler.cc:  5828: | | | | | | >handler::ha_external_lock
+T@1    :   208:     handler.cc:  5897: | | | | | | <handler::ha_external_lock
+T@1    :   209:     handler.cc:  2541: | >handler::ha_rnd_next
+T@1    :   210:     handler.cc:  2561: | <handler::ha_rnd_next
+T@1    :   211:     handler.cc:  5828: | | | | >handler::ha_external_lock
+T@1    :   212:     handler.cc:  5897: | | | | <handler::ha_external_lock
+T@1    :   213:     handler.cc:  5828: | | | | | | | >handler::ha_external_lock
+T@1    :   214:     handler.cc:  5897: | | | | | | | <handler::ha_external_lock
+T@1    :   215:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   216:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   217:     handler.cc:  5828: | | | | | | | >handler::ha_external_lock
+T@1    :   218:     handler.cc:  5897: | | | | | | | <handler::ha_external_lock
+T@1    :   219:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   220:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   221:     handler.cc:  2457: | | | | | | | >handler::ha_open
+T@1    :   222:     handler.cc:  2461: | | | | | | | | enter: name: ./mysql/event  db_type: 9  db_stat: 33  mode: 2  lock_test: 18
+T@1    :   223:     handler.cc:  2466: | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@1    :   224:     handler.cc:   238: | | | | | | | | mutex: share->LOCK_share (0x56065dc07398) locking
+T@1    :   225:     handler.cc:   399: | | | | | | | | mutex: share->LOCK_share (0x56065dc07398) locked
+T@1    :   226:     handler.cc:   407: | | | | | | | | mutex: share->LOCK_share (0x56065dc07398) unlocking
+T@1    :   227:     handler.cc:  2514: | | | | | | | <handler::ha_open
+T@1    :   228:     handler.cc:  5828: | | | | | | | >handler::ha_external_lock
+T@1    :   229:     handler.cc:  5897: | | | | | | | <handler::ha_external_lock
+T@1    :   230:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   231:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@1    :   232:     handler.cc:  5828: | | | | | | | | >handler::ha_external_lock
+T@1    :   233:     handler.cc:  5897: | | | | | | | | <handler::ha_external_lock
+T@1    :   234:     handler.cc:  2541: | | >handler::ha_rnd_next
+T@1    :   235:     handler.cc:  2561: | | <handler::ha_rnd_next
+T@1    :   236:     handler.cc:  5828: | | | | | >handler::ha_external_lock
+T@1    :   237:     handler.cc:  5897: | | | | | <handler::ha_external_lock
+T@19   :     1:     handler.cc:  2457: | | | | | | | | | | >handler::ha_open
+T@19   :     2:     handler.cc:  2461: | | | | | | | | | | | enter: name: /tmp/#sql_2dac_0  db_type: 6  db_stat: 0  mode: 2  lock_test: 516
+T@19   :     3:     handler.cc:  2466: | | | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@19   :     4:     handler.cc:  2514: | | | | | | | | | | <handler::ha_open
+T@19   :     5:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :     6:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :     7:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :     8:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :     9:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    10:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    11:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    12:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    13:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    14:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    15:     handler.cc:  2457: | | | | | | | | | | >handler::ha_open
+T@19   :    16:     handler.cc:  2461: | | | | | | | | | | | enter: name: /tmp/#sql_2dac_0  db_type: 6  db_stat: 0  mode: 2  lock_test: 516
+T@19   :    17:     handler.cc:  2466: | | | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@19   :    18:     handler.cc:  2514: | | | | | | | | | | <handler::ha_open
+T@19   :    19:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    20:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    21:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    22:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    23:     handler.cc:  2457: | | | | | | | | >handler::ha_open
+T@19   :    24:     handler.cc:  2461: | | | | | | | | | enter: name: ./test/csv_test  db_type: 17  db_stat: 33  mode: 2  lock_test: 18
+T@19   :    25:     handler.cc:  2466: | | | | | | | | | info: old m_lock_type: 2 F_UNLCK 2
+T@19   :    26:     ha_tina.cc:   952: | | | | | | | | | >ha_tina::open
+T@19   :    27:     ha_tina.cc:   238: | | | | | | | | | | mutex: tina_mutex (0x56065c48dfa0) locking
+T@19   :    28:     ha_tina.cc:   399: | | | | | | | | | | mutex: tina_mutex (0x56065c48dfa0) locked
+T@19   :    29:     ha_tina.cc:   238: | | | | | | | | | | mutex: THR_LOCK_lock (0x56065ccf18a0) locking
+T@19   :    30:     ha_tina.cc:   399: | | | | | | | | | | mutex: THR_LOCK_lock (0x56065ccf18a0) locked
+T@19   :    31:     ha_tina.cc:   407: | | | | | | | | | | mutex: THR_LOCK_lock (0x56065ccf18a0) unlocking
+T@19   :    32:     ha_tina.cc:   298: | | | | | | | | | | >ha_tina::read_meta_file
+T@19   :    33:     ha_tina.cc:   325: | | | | | | | | | | <ha_tina::read_meta_file
+T@19   :    34:     ha_tina.cc:   407: | | | | | | | | | | mutex: tina_mutex (0x56065c48dfa0) unlocking
+T@19   :    35:     ha_tina.cc:   985: | | | | | | | | | <ha_tina::open
+T@19   :    36:     ha_tina.cc:  1313: | | | | | | | | | >ha_tina::extra
+T@19   :    37:     ha_tina.cc:  1320: | | | | | | | | | <ha_tina::extra
+T@19   :    38:     handler.cc:  2514: | | | | | | | | <handler::ha_open
+T@19   :    39:     ha_tina.cc:  1313: | | | | | | | >ha_tina::extra
+T@19   :    40:     ha_tina.cc:  1320: | | | | | | | <ha_tina::extra
+T@19   :    41:     ha_tina.cc:  1313: | | | | | | >ha_tina::extra
+T@19   :    42:     ha_tina.cc:  1320: | | | | | | <ha_tina::extra
+T@19   :    43:     ha_tina.cc:  1313: | | | >ha_tina::extra
+T@19   :    44:     ha_tina.cc:  1320: | | | <ha_tina::extra
+T@19   :    45:     ha_tina.cc:  1313: | | | | >ha_tina::extra
+T@19   :    46:     ha_tina.cc:  1320: | | | | <ha_tina::extra
+T@19   :    47:     ha_tina.cc:  1313: | | | | | | | | | >ha_tina::extra
+T@19   :    48:     ha_tina.cc:  1320: | | | | | | | | | <ha_tina::extra
+T@19   :    49:     ha_tina.cc:  1313: | | | | | | | | >ha_tina::extra
+T@19   :    50:     ha_tina.cc:  1320: | | | | | | | | <ha_tina::extra
+T@19   :    51:     ha_tina.cc:  1313: | | | | | | | >ha_tina::extra
+T@19   :    52:     ha_tina.cc:  1320: | | | | | | | <ha_tina::extra
+T@19   :    53:     handler.cc:  5828: | | | | | | | | | >handler::ha_external_lock
+T@19   :    54:     handler.cc:  5897: | | | | | | | | | <handler::ha_external_lock
+T@19   :    55:     ha_tina.cc:  1299: | | | | | | | | >ha_tina::info
+T@19   :    56:     ha_tina.cc:  1303: | | | | | | | | <ha_tina::info
+T@19   :    57:     ha_tina.cc:  1197: | | | | | | | | | | | >ha_tina::rnd_init
+T@19   :    58:     ha_tina.cc:  1208: | | | | | | | | | | | <ha_tina::rnd_init
+T@19   :    59:     ha_tina.cc:  1313: | | | | | | | | | | >ha_tina::extra
+T@19   :    60:     ha_tina.cc:  1320: | | | | | | | | | | <ha_tina::extra
+T@19   :    61:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    62:     ha_tina.cc:  1228: | | | | | | | | | | >ha_tina::rnd_next
+T@19   :    63:     ha_tina.cc:   666: | | | | | | | | | | | >ha_tina::find_current_row
+T@19   :    64:     ha_tina.cc:   862: | | | | | | | | | | | <ha_tina::find_current_row
+T@19   :    65:     ha_tina.cc:  1255: | | | | | | | | | | <ha_tina::rnd_next
+T@19   :    66:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    67:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    68:     ha_tina.cc:  1228: | | | | | | | | | | >ha_tina::rnd_next
+T@19   :    69:     ha_tina.cc:   666: | | | | | | | | | | | >ha_tina::find_current_row
+T@19   :    70:     ha_tina.cc:   862: | | | | | | | | | | | <ha_tina::find_current_row
+T@19   :    71:     ha_tina.cc:  1255: | | | | | | | | | | <ha_tina::rnd_next
+T@19   :    72:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    73:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    74:     ha_tina.cc:  1228: | | | | | | | | | | >ha_tina::rnd_next
+T@19   :    75:     ha_tina.cc:   666: | | | | | | | | | | | >ha_tina::find_current_row
+T@19   :    76:     ha_tina.cc:   862: | | | | | | | | | | | <ha_tina::find_current_row
+T@19   :    77:     ha_tina.cc:  1255: | | | | | | | | | | <ha_tina::rnd_next
+T@19   :    78:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    79:     handler.cc:  2541: | | | | | | | | | >handler::ha_rnd_next
+T@19   :    80:     ha_tina.cc:  1228: | | | | | | | | | | >ha_tina::rnd_next
+T@19   :    81:     ha_tina.cc:   666: | | | | | | | | | | | >ha_tina::find_current_row
+T@19   :    82:     ha_tina.cc:   677: | | | | | | | | | | | <ha_tina::find_current_row
+T@19   :    83:     ha_tina.cc:  1255: | | | | | | | | | | <ha_tina::rnd_next
+T@19   :    84:     handler.cc:  2561: | | | | | | | | | <handler::ha_rnd_next
+T@19   :    85:     ha_tina.cc:  1349: | | | | | | | | | | | | >ha_tina::rnd_end
+T@19   :    86:     ha_tina.cc:  1466: | | | | | | | | | | | | <ha_tina::rnd_end
+T@19   :    87:     ha_tina.cc:  1313: | | | | | | | | | | | >ha_tina::extra
+T@19   :    88:     ha_tina.cc:  1320: | | | | | | | | | | | <ha_tina::extra
+T@19   :    89:     handler.cc:  5828: | | | | | | | | | | | >handler::ha_external_lock
+T@19   :    90:     handler.cc:  5897: | | | | | | | | | | | <handler::ha_external_lock
+T@19   :    91:     ha_tina.cc:  1313: | | | | | >ha_tina::extra
+T@19   :    92:     ha_tina.cc:  1320: | | | | | <ha_tina::extra
+T@19   :    93:     ha_tina.cc:  1313: | | | | | | >ha_tina::extra
+T@19   :    94:     ha_tina.cc:  1320: | | | | | | <ha_tina::extra

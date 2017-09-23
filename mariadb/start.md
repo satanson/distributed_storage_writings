@@ -464,11 +464,9 @@ mysql> set debug = 'i:t:d:N:O,/home/grakra/mysqld.trace:f,ha_tina\:\:rnd_init';
 # also print file name and line number of source file.
 mysql> set debug = 'i:t:d:N:F:L:r:O,/home/grakra/mysqld.trace:f,ha_tina*,handler*,handlerton*';
 
+# shutdown query cache
+mysql> set query_cache_type = 0;
 ```
-
-
-
-
 
 
 
