@@ -374,3 +374,15 @@ pip install gprof2dot
 
 
 
+choose the simplest storage engine: `storage/csv`
+
+-  create table: `test.csv_test`
+
+[ref: csv-overview](https://mariadb.com/kb/en/library/csv-overview/)
+
+- set breakpoints on `ha_tina::method` 
+
+```shell
+perl -lne 'print $1 if /(ha_tina::\w+\b)/' storage/csv/ha_tina.cc |sort -u
+```
+
