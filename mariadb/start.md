@@ -432,7 +432,24 @@ br ha_tina::write_row
 # enable dbug in cmdline options
 sql/mysqld --console --debug
 
+#field_1:field_2:...:field_N
+#[+|-]flag[,modifier,modifier,...,modifier]
+# d: enable output of DBUG_XXX
+# D,tenth_of_second: delay output
+# i: process/thread ID
+# P: process/thread name
+# F: file name of source file
+# L: line number of source file
+# N: line number of output
+# n: nesting-depth
+# f: function name filter
+# p: thread/pid filter
+# r: no nesting level
+# S: sanity check
+# o: redirect output to file(append), default stderr
+# O: redirect output to file(truncate)
 # enable dbug on-the-fly by using client
+
 mysql> set debug ='t:i:d:o,mysqld.trace'
 mysql> select @@debug;
 mysql> show variables likes "debug";
