@@ -383,6 +383,65 @@ choose the simplest storage engine: `storage/csv`
 - set breakpoints on `ha_tina::method` 
 
 ```shell
-perl -lne 'print $1 if /(ha_tina::\w+\b)/' storage/csv/ha_tina.cc |sort -u
+perl -lne 'print "br $1" if /(ha_tina::\w+\b)/' storage/csv/ha_tina.cc \
+|sort -u |tee mariadb.gdb
+
+
+br ha_tina::chain_append
+br ha_tina::check
+br ha_tina::check_and_repair
+br ha_tina::check_if_incompatible_data
+br ha_tina::close
+br ha_tina::create
+br ha_tina::delete_all_rows
+br ha_tina::delete_row
+br ha_tina::encode_quote
+br ha_tina::external_lock
+br ha_tina::extra
+br ha_tina::find_current_row
+br ha_tina::free_share
+br ha_tina::get_status
+br ha_tina::get_write_pos
+br ha_tina::ha_tina
+br ha_tina::info
+br ha_tina::init_data_file
+br ha_tina::init_tina_writer
+br ha_tina::is_crashed
+br ha_tina::open
+br ha_tina::open_update_temp_file_if_needed
+br ha_tina::position
+br ha_tina::read_meta_file
+br ha_tina::repair
+br ha_tina::reset
+br ha_tina::rnd_end
+br ha_tina::rnd_init
+br ha_tina::rnd_next
+br ha_tina::rnd_pos
+br ha_tina::store_lock
+br ha_tina::update_row
+br ha_tina::update_status
+br ha_tina::write_meta_file
+br ha_tina::write_row
+```
+
+
+
+[dbug](https://dev.mysql.com/doc/refman/5.7/en/dbug-package.html)
+
+```shell
+sql/mysqld --console --debug
+```
+
+
+
+
+
+
+
+```shell
+su
+echo 0 > /proc/sys/kernel/yama/ptrace_scope
+gdb sql/mysqld $(ps h -C mysqld -o pid)
+
 ```
 
