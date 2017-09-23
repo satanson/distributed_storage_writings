@@ -429,7 +429,15 @@ br ha_tina::write_row
 [dbug](https://dev.mysql.com/doc/refman/5.7/en/dbug-package.html)
 
 ```shell
+# enable dbug in cmdline options
 sql/mysqld --console --debug
+
+# enable dbug on-the-fly by using client
+mysql> set debug ='t:i:d:o,mysqld.trace'
+mysql> select @@debug;
+mysql> show variables likes "debug";
+mysql> show  variables where Variable_name ="debug";
+
 ```
 
 
@@ -442,6 +450,5 @@ sql/mysqld --console --debug
 su
 echo 0 > /proc/sys/kernel/yama/ptrace_scope
 gdb sql/mysqld $(ps h -C mysqld -o pid)
-
 ```
 
