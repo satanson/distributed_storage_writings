@@ -198,7 +198,7 @@ pip install gprof2dot
 
 ![image](mysqld_fsync.png)
 
-## 8. mariadb architecture
+## 7. mariadb architecture
 
 **in thread perspective**
 
@@ -265,7 +265,7 @@ pip install gprof2dot
 - for debug propose?
 - for checkpointing propose?
 
- 
+
 
 - `srv_purge_coodinator_thread`
 
@@ -304,7 +304,7 @@ pip install gprof2dot
 > 
 -  unknown
 
-- `dict_stats_thread`
+-  `dict_stats_thread`
 
 > 
 - unknown
@@ -370,5 +370,7 @@ pip install gprof2dot
 
 
 
-##
+## 8. decomposed table handler and storage engine
+
+
 
