@@ -559,8 +559,46 @@ maria_declare_plugin_end;
 builtin_maria_csv_plugin_interface_version
 builtin_maria_csv_sizeof_struct_st_plugin
 builtin_maria_csv_plugin
-  
+
+# include/mysql/plugin.h:521
+struct st_maria_plugin
+{
+  int type;             /* the plugin type (a MYSQL_XXX_PLUGIN value)   */
+  void *info;           /* pointer to type-specific plugin descriptor   */
+  const char *name;     /* plugin name                                  */
+  const char *author;   /* plugin author (for SHOW PLUGINS)             */
+  const char *descr;    /* general descriptive text (for SHOW PLUGINS ) */
+  int license;          /* the plugin license (PLUGIN_LICENSE_XXX)      */
+  int (*init)(void *);  /* the function to invoke when plugin is loaded */
+  int (*deinit)(void *);/* the function to invoke when plugin is unloaded */
+  unsigned int version; /* plugin version (for SHOW PLUGINS)            */
+  struct st_mysql_show_var *status_vars;
+  struct st_mysql_sys_var **system_vars;
+  const char *version_info;  /* plugin version string */
+  unsigned int maturity; /* MariaDB_PLUGIN_MATURITY_XXX */
+};
+
+
 ```
 
 
+
+**get_new_handler**
+
+```
+#0 get_new_handler at sql/handler.cc:251
+#1 TABLE_SHARE::init_from_binary_frm_image at sql/table.cc:1680
+#2 open_table_def at sql/table.cc:669
+#3 tdc_acquire_share at sql/table_cache.cc:825
+#4 open_table at sql/sql_base.cc:1742
+#5 open_and_process_table at sql/sql_base.cc:3409
+#6 open_tables at sql/sql_base.cc:3926
+#7 open_and_lock_tables at sql/sql_base.cc:4682
+#8 open_and_lock_tables at sql/sql_base.h:493
+#9 plugin_load at sql/sql_plugin.cc:1792
+#10 plugin_init at sql/sql_plugin.cc:1670
+#11 init_server_components at sql/mysqld.cc:5256
+#12 mysqld_main at sql/mysqld.cc:5848
+#13 main at sql/main.cc:25
+```
 
