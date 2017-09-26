@@ -510,9 +510,56 @@ enum legacy_db_type
 
 
 
-```
+```c++
 #include/mysql/plugin.h
 
+#define maria_declare_plugin(NAME) \
+MARIA_DECLARE_PLUGIN__(NAME, \
+                 builtin_maria_ ## NAME ## _plugin_interface_version, \
+                 builtin_maria_ ## NAME ## _sizeof_struct_st_plugin, \
+                 builtin_maria_ ## NAME ## _plugin)
+
+#define mysql_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
+#define maria_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
+
+
+#define  MYSQL_PLUGIN_EXPORT extern "C"
+
+MARIA_DECLARE_PLUGIN__
+#ifndef MYSQL_DYNAMIC_PLUGIN
+int VERSION= MARIA_PLUGIN_INTERFACE_VERSION; 
+int PSIZE= sizeof(struct st_maria_plugin);
+struct st_maria_plugin DECLS[]= {}
+
+#else
+int _maria_plugin_interface_version_= MARIA_PLUGIN_INTERFACE_VERSION;
+int _maria_sizeof_struct_st_plugin_= sizeof(struct st_maria_plugin);
+struct st_maria_plugin _maria_plugin_declarations_[]= {
+
+# storage/csv/ha_tina.cc: 1785
+
+maria_declare_plugin(csv)
+{
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &csv_storage_engine,
+  "CSV",
+  "Brian Aker, MySQL AB",
+  "CSV storage engine",
+  PLUGIN_LICENSE_GPL,
+  tina_init_func, /* Plugin Init */
+  tina_done_func, /* Plugin Deinit */
+  0x0100 /* 1.0 */,
+  NULL,                       /* status variables                */
+  NULL,                       /* system variables                */
+  "1.0",                      /* string version */
+  MariaDB_PLUGIN_MATURITY_STABLE /* maturity */
+}
+maria_declare_plugin_end;
+
+builtin_maria_csv_plugin_interface_version
+builtin_maria_csv_sizeof_struct_st_plugin
+builtin_maria_csv_plugin
+  
 ```
 
 
