@@ -602,3 +602,14 @@ struct st_maria_plugin
 #13 main at sql/main.cc:25
 ```
 
+
+
+```
+#0  plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=2)
+    at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1694
+#1  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
+#2  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678)
+    at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
+#3  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc88) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
+```
+
