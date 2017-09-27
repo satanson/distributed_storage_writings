@@ -578,7 +578,6 @@ struct st_maria_plugin
   unsigned int maturity; /* MariaDB_PLUGIN_MATURITY_XXX */
 };
 
-
 ```
 
 
@@ -611,5 +610,42 @@ struct st_maria_plugin
 #2  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678)
     at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
 #3  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc88) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
+```
+
+
+
+```
+sql/sql_plugin.cc
+228:static HASH plugin_hash[MYSQL_MAX_PLUGIN_TYPE_NUM];
+1151:    if (my_hash_insert(&plugin_hash[plugin->type], (uchar*)tmp_plugin_ptr))
+1564:    if (my_hash_init(&plugin_hash[i], system_charset_info, 32, 0, 0,
+1760:  if (my_hash_insert(&plugin_hash[plugin->type],(uchar*) *ptr))
+
+```
+
+
+
+```
+static bool register_builtin(struct st_maria_plugin *plugin,
+                             struct st_plugin_int *tmp,
+                             struct st_plugin_int **ptr)
+{
+  DBUG_ENTER("register_builtin");
+  tmp->ref_count= 0;
+  tmp->plugin_dl= 0;
+
+  if (insert_dynamic(&plugin_array, (uchar*)&tmp))
+    DBUG_RETURN(1);
+
+  *ptr= *dynamic_element(&plugin_array, plugin_array.elements - 1,
+                         struct st_plugin_int **)=
+        (struct st_plugin_int *) memdup_root(&plugin_mem_root, (uchar*)tmp,
+                                             sizeof(struct st_plugin_int));
+
+  if (my_hash_insert(&plugin_hash[plugin->type],(uchar*) *ptr))
+    DBUG_RETURN(1);
+
+  DBUG_RETURN(0);
+}
 ```
 
