@@ -683,3 +683,31 @@ $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
 
 ```
 
+
+
+```
+sql/sql_plugin.cc
+51:extern struct st_maria_plugin *mysql_mandatory_plugins[];
+1586:  for (builtins= mysql_mandatory_plugins; *builtins || mandatory; builtins++)
+1631:  DBUG_ASSERT(plugin_ptr || !mysql_mandatory_plugins[0]);
+2452:    for (builtins= mysql_mandatory_plugins; !err && *builtins; builtins++)
+
+mysqld.symbols
+6179:sql/mysqld:000000000190f3c0 D mysql_mandatory_plugins	/home/grakra/workspace/mariadb/server/sql/sql_builtin.cc:39
+
+sql/sql_builtin.cc.in
+27:  @mysql_mandatory_plugins@ @mysql_optional_plugins@
+39:struct st_maria_plugin *mysql_mandatory_plugins[]=
+45:  @mysql_mandatory_plugins@ 0
+
+extra/mariabackup/encryption_plugin.cc
+15:extern struct st_maria_plugin *mysql_mandatory_plugins[];
+151:  mysql_optional_plugins[0] = mysql_mandatory_plugins[0] = 0;
+
+cmake/plugin.cmake
+174:      SET (mysql_mandatory_plugins  
+175:        "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
+176:      SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
+
+```
+
