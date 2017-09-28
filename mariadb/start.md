@@ -659,3 +659,27 @@ static bool register_builtin(struct st_maria_plugin *plugin,
 
 ```
 
+
+
+```
+(gdb) p builtins
+$4 = (st_maria_plugin **) 0x555556e633d8 <mysql_mandatory_plugins+24>
+(gdb) p builtins[0]@10
+$5 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>}
+(gdb) p builtins[0]@24
+$6 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>, 0x55555662d0d2, 0x1, 0x0}
+(gdb) p mysql_mandatory_plugins
+$7 = 0x555556e633c0 <mysql_mandatory_plugins>
+(gdb) p mysql_mandatory_plugins[0]@24
+$8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_maria_mysql_password_plugin>, 0x555556e62ea0 <builtin_maria_wsrep_plugin>,
+  0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
+(gdb) p mysql_mandatory_plugins[3]@1 
+$9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
+
+```
+
