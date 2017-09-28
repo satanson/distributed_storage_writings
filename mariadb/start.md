@@ -620,7 +620,6 @@ sql/sql_plugin.cc
 1151:    if (my_hash_insert(&plugin_hash[plugin->type], (uchar*)tmp_plugin_ptr))
 1564:    if (my_hash_init(&plugin_hash[i], system_charset_info, 32, 0, 0,
 1760:  if (my_hash_insert(&plugin_hash[plugin->type],(uchar*) *ptr))
-
 ```
 
 
@@ -647,5 +646,16 @@ static bool register_builtin(struct st_maria_plugin *plugin,
 
   DBUG_RETURN(0);
 }
+```
+
+
+
+```
+#0  register_builtin (plugin=0x555556e6b240 <builtin_maria_csv_plugin>, tmp=0x7fffffffcf10, ptr=0x7fffffffce40) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1748
+#1  0x0000555555b1a67c in plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=0) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1621
+#2  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
+#3  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678) at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
+#4  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc68) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
+
 ```
 
