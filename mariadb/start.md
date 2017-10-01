@@ -788,5 +788,16 @@ ENDMACRO()
 
 *sql/sql_builtin.cc.in, sql/sql_builtin.cc*
 
+```c++
+extern builtin_maria_plugin builtin_maria_csv_plugin ...;
+struct st_maria_plugin *mysql_mandatory_plugins[]= {
+    ...
+    builtin_maria_csv_plugin,
+    ...
+}
+
+
+```
+
 
 
