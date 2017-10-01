@@ -482,30 +482,7 @@ gdb sql/mysqld $(ps h -C mysqld -o pid)
 **legacy_db_type**
 
 ```c++
-# sql/handler.h: 418
 
-enum legacy_db_type     
-{     
-  /* note these numerical values are fixed and can *not* be changed */      
-  DB_TYPE_UNKNOWN=0,     
-  DB_TYPE_HEAP=6,     
-  DB_TYPE_MYISAM=9,     
-  DB_TYPE_MRG_MYISAM=10,     
-  DB_TYPE_INNODB=12,     
-  DB_TYPE_EXAMPLE_DB=15,     
-  DB_TYPE_ARCHIVE_DB=16,     
-  DB_TYPE_CSV_DB=17,     
-  DB_TYPE_FEDERATED_DB=18,     
-  DB_TYPE_BLACKHOLE_DB=19,     
-  DB_TYPE_PARTITION_DB=20,     
-  DB_TYPE_BINLOG=21,     
-  DB_TYPE_PBXT=23,     
-  DB_TYPE_PERFORMANCE_SCHEMA=28,     
-  DB_TYPE_ARIA=42,     
-  DB_TYPE_TOKUDB=43,     
-  DB_TYPE_FIRST_DYNAMIC=44,     
-  DB_TYPE_DEFAULT=127 // Must be last      
-};     
 ```
 
 
@@ -814,3 +791,33 @@ MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
    MYSQL_ADD_PLUGIN(foobar ha_foobar.cc ...  STORAGE_ENGINE MANDATORY)
    ```
 
+4. register db type in sql/handler.h
+
+   ```c++
+   # sql/handler.h: 418
+
+   enum legacy_db_type     
+   {     
+     /* note these numerical values are fixed and can *not* be changed */      
+     DB_TYPE_UNKNOWN=0,     
+     DB_TYPE_HEAP=6,     
+     DB_TYPE_MYISAM=9,     
+     DB_TYPE_MRG_MYISAM=10,     
+     DB_TYPE_INNODB=12,     
+     DB_TYPE_EXAMPLE_DB=15,     
+     DB_TYPE_ARCHIVE_DB=16,     
+     DB_TYPE_CSV_DB=17,     
+     DB_TYPE_FEDERATED_DB=18,     
+     DB_TYPE_BLACKHOLE_DB=19,     
+     DB_TYPE_PARTITION_DB=20,     
+     DB_TYPE_BINLOG=21,     
+     DB_TYPE_PBXT=23,     
+     DB_TYPE_PERFORMANCE_SCHEMA=28,     
+     DB_TYPE_ARIA=42,     
+     DB_TYPE_TOKUDB=43,     
+     DB_TYPE_FIRST_DYNAMIC=44,     
+     DB_TYPE_DEFAULT=127 // Must be last      
+   };     
+   ```
+
+   ​
