@@ -729,6 +729,31 @@ cmake/plugin.cmake
 *cmake/plugin.cmake*
 
 ```cmake
+
+40         INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
+41             ${CMAKE_SOURCE_DIR}/sql
+42             ${PCRE_INCLUDES}
+43             ${SSL_INCLUDE_DIRS}
+44             ${ZLIB_INCLUDE_DIR})
+ 
+138             ADD_LIBRARY(${target} STATIC ${SOURCES})
+
+163             IF(ARG_LINK_LIBRARIES)
+164                 TARGET_LINK_LIBRARIES (${target} ${ARG_LINK_LIBRARIES})
+165             ENDIF()
+
+
+173             IF(ARG_MANDATORY)
+174                 SET (mysql_mandatory_plugins
+175                     "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
+176                 SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
+177             ELSE()
+178                 SET (mysql_optional_plugins
+179                     "${mysql_optional_plugins} builtin_maria_${target}_plugin,")
+180                 SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
+181             ENDIF()
+
+
 263 MACRO(CONFIGURE_PLUGINS)
 264     IF(NOT WITHOUT_SERVER)
 265         FILE(GLOB dirs_storage ${CMAKE_SOURCE_DIR}/storage/*)
