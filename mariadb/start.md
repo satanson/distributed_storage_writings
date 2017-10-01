@@ -708,7 +708,6 @@ cmake/plugin.cmake
 174:      SET (mysql_mandatory_plugins  
 175:        "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
 176:      SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
-
 ```
 
 *CMakeLists.txt*
@@ -758,34 +757,36 @@ SET (mysql_optional_plugins
 SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
 
 
+# Add all CMake projects under storage  and plugin 
+# subdirectories, configure sql_builtins.cc
+MACRO(CONFIGURE_PLUGINS)
+    IF(NOT WITHOUT_SERVER)
+        FILE(GLOB dirs_storage ${CMAKE_SOURCE_DIR}/storage/*)
+    ENDIF()
 
+    FILE(GLOB dirs_plugin ${CMAKE_SOURCE_DIR}/plugin/*)
+    FOREACH(dir ${dirs_storage} ${dirs_plugin})
+        IF (EXISTS ${dir}/CMakeLists.txt)
+            ADD_SUBDIRECTORY(${dir})
+        ENDIF()
+    ENDFOREACH()
 
-263 MACRO(CONFIGURE_PLUGINS)
-264     IF(NOT WITHOUT_SERVER)
-265         FILE(GLOB dirs_storage ${CMAKE_SOURCE_DIR}/storage/*)
-266     ENDIF()
-267 
-268     FILE(GLOB dirs_plugin ${CMAKE_SOURCE_DIR}/plugin/*)
-269     FOREACH(dir ${dirs_storage} ${dirs_plugin})
-270         IF (EXISTS ${dir}/CMakeLists.txt)
-271             ADD_SUBDIRECTORY(${dir})
-272         ENDIF()
-273     ENDFOREACH()
-274 
-275     GET_CMAKE_PROPERTY(ALL_VARS VARIABLES)
-276     FOREACH (V ${ALL_VARS})
-277         IF (V MATCHES "^PLUGIN_" AND ${V} MATCHES "YES")
-278             STRING(SUBSTRING ${V} 7 -1 plugin)
-279             STRING(TOLOWER ${plugin} target)
-280             IF (NOT TARGET ${target})
-281                 MESSAGE(FATAL_ERROR "Plugin ${plugin} cannot be built")
-282             ENDIF()
-283         ENDIF()
-284     ENDFOREACH()
-285 ENDMACRO()
-
-
+    GET_CMAKE_PROPERTY(ALL_VARS VARIABLES)
+    FOREACH (V ${ALL_VARS})
+        IF (V MATCHES "^PLUGIN_" AND ${V} MATCHES "YES")
+            STRING(SUBSTRING ${V} 7 -1 plugin)
+            STRING(TOLOWER ${plugin} target)
+            IF (NOT TARGET ${target})
+                MESSAGE(FATAL_ERROR "Plugin ${plugin} cannot be built")
+            ENDIF()
+        ENDIF()
+    ENDFOREACH()
+ENDMACRO()
 ```
+
+
+
+*sql/sql_builtin.cc.in, sql/sql_builtin.cc*
 
 
 
