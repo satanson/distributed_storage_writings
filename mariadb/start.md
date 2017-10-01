@@ -1,4 +1,5 @@
 
+
 ## 1. compile debug version of mariadb
 
 ```
@@ -505,78 +506,11 @@ enum legacy_db_type
   DB_TYPE_FIRST_DYNAMIC=44,     
   DB_TYPE_DEFAULT=127 // Must be last      
 };     
-
 ```
 
 
 
 ```c++
-#include/mysql/plugin.h
-
-#define maria_declare_plugin(NAME) \
-MARIA_DECLARE_PLUGIN__(NAME, \
-                 builtin_maria_ ## NAME ## _plugin_interface_version, \
-                 builtin_maria_ ## NAME ## _sizeof_struct_st_plugin, \
-                 builtin_maria_ ## NAME ## _plugin)
-
-#define mysql_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
-#define maria_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
-
-
-#define  MYSQL_PLUGIN_EXPORT extern "C"
-
-MARIA_DECLARE_PLUGIN__
-#ifndef MYSQL_DYNAMIC_PLUGIN
-int VERSION= MARIA_PLUGIN_INTERFACE_VERSION; 
-int PSIZE= sizeof(struct st_maria_plugin);
-struct st_maria_plugin DECLS[]= {}
-
-#else
-int _maria_plugin_interface_version_= MARIA_PLUGIN_INTERFACE_VERSION;
-int _maria_sizeof_struct_st_plugin_= sizeof(struct st_maria_plugin);
-struct st_maria_plugin _maria_plugin_declarations_[]= {
-
-# storage/csv/ha_tina.cc: 1785
-
-maria_declare_plugin(csv)
-{
-  MYSQL_STORAGE_ENGINE_PLUGIN,
-  &csv_storage_engine,
-  "CSV",
-  "Brian Aker, MySQL AB",
-  "CSV storage engine",
-  PLUGIN_LICENSE_GPL,
-  tina_init_func, /* Plugin Init */
-  tina_done_func, /* Plugin Deinit */
-  0x0100 /* 1.0 */,
-  NULL,                       /* status variables                */
-  NULL,                       /* system variables                */
-  "1.0",                      /* string version */
-  MariaDB_PLUGIN_MATURITY_STABLE /* maturity */
-}
-maria_declare_plugin_end;
-
-builtin_maria_csv_plugin_interface_version
-builtin_maria_csv_sizeof_struct_st_plugin
-builtin_maria_csv_plugin
-
-# include/mysql/plugin.h:521
-struct st_maria_plugin
-{
-  int type;             /* the plugin type (a MYSQL_XXX_PLUGIN value)   */
-  void *info;           /* pointer to type-specific plugin descriptor   */
-  const char *name;     /* plugin name                                  */
-  const char *author;   /* plugin author (for SHOW PLUGINS)             */
-  const char *descr;    /* general descriptive text (for SHOW PLUGINS ) */
-  int license;          /* the plugin license (PLUGIN_LICENSE_XXX)      */
-  int (*init)(void *);  /* the function to invoke when plugin is loaded */
-  int (*deinit)(void *);/* the function to invoke when plugin is unloaded */
-  unsigned int version; /* plugin version (for SHOW PLUGINS)            */
-  struct st_mysql_show_var *status_vars;
-  struct st_mysql_sys_var **system_vars;
-  const char *version_info;  /* plugin version string */
-  unsigned int maturity; /* MariaDB_PLUGIN_MATURITY_XXX */
-};
 
 ```
 
@@ -656,7 +590,6 @@ static bool register_builtin(struct st_maria_plugin *plugin,
 #2  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
 #3  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678) at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
 #4  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc68) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
-
 ```
 
 
@@ -680,7 +613,6 @@ $8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_mari
   0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
 (gdb) p mysql_mandatory_plugins[3]@1 
 $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
-
 ```
 
 
@@ -786,7 +718,7 @@ ENDMACRO()
 
 
 
-*sql/sql_builtin.cc.in, sql/sql_builtin.cc*
+*`sql/sql_builtin.cc.in, sql/sql_builtin.cc`*
 
 ```c++
 extern builtin_maria_plugin builtin_maria_csv_plugin ...;
@@ -796,8 +728,56 @@ struct st_maria_plugin *mysql_mandatory_plugins[]= {
     ...
 }
 
-
 ```
 
+*`storage/csv/ha_tina.cc`*
 
+```c++
+maria_declare_plugin(csv)
+{
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &csv_storage_engine,
+  "CSV",
+  "Brian Aker, MySQL AB",
+  "CSV storage engine",
+  PLUGIN_LICENSE_GPL,
+  tina_init_func, /* Plugin Init */
+  tina_done_func, /* Plugin Deinit */
+  0x0100 /* 1.0 */,
+  NULL,                       /* status variables                */
+  NULL,                       /* system variables                */
+  "1.0",                      /* string version */
+  MariaDB_PLUGIN_MATURITY_STABLE /* maturity */
+}
+maria_declare_plugin_end;
+```
+
+*`include/mysql/plugin.h`*
+
+```c++
+#define maria_declare_plugin(NAME) \
+MARIA_DECLARE_PLUGIN__(NAME, \
+                 builtin_maria_ ## NAME ## _plugin_interface_version, \
+                 builtin_maria_ ## NAME ## _sizeof_struct_st_plugin, \
+                 builtin_maria_ ## NAME ## _plugin)
+
+#define maria_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
+
+struct st_maria_plugin
+{
+  int type;             /* the plugin type (a MYSQL_XXX_PLUGIN value)   */
+  void *info;           /* pointer to type-specific plugin descriptor   */
+  const char *name;     /* plugin name                                  */
+  const char *author;   /* plugin author (for SHOW PLUGINS)             */
+  const char *descr;    /* general descriptive text (for SHOW PLUGINS ) */
+  int license;          /* the plugin license (PLUGIN_LICENSE_XXX)      */
+  int (*init)(void *);  /* the function to invoke when plugin is loaded */
+  int (*deinit)(void *);/* the function to invoke when plugin is unloaded */
+  unsigned int version; /* plugin version (for SHOW PLUGINS)            */
+  struct st_mysql_show_var *status_vars;
+  struct st_mysql_sys_var **system_vars;
+  const char *version_info;  /* plugin version string */
+  unsigned int maturity; /* MariaDB_PLUGIN_MATURITY_XXX */
+};
+```
 
