@@ -714,13 +714,16 @@ cmake/plugin.cmake
 *CMakeLists.txt*
 
 ```cmake
-159 INCLUDE(plugin)
+# set module search path CMAKE_MODULE_PATH to ${CMAKE_SOURCE_DIR}/cmake
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-369 # Add storage engines and plugins.
-370 CONFIGURE_PLUGINS()
+# import cmake/plugin.cmake
+INCLUDE(plugin)
 
-433 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in
-434     ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
+# Add storage engines and plugins.
+CONFIGURE_PLUGINS()
+
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
 
 ```
 
@@ -729,6 +732,7 @@ cmake/plugin.cmake
 *cmake/plugin.cmake*
 
 ```cmake
+
 
 40         INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
 41             ${CMAKE_SOURCE_DIR}/sql
@@ -742,7 +746,6 @@ cmake/plugin.cmake
 164                 TARGET_LINK_LIBRARIES (${target} ${ARG_LINK_LIBRARIES})
 165             ENDIF()
 
-
 173             IF(ARG_MANDATORY)
 174                 SET (mysql_mandatory_plugins
 175                     "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
@@ -752,6 +755,7 @@ cmake/plugin.cmake
 179                     "${mysql_optional_plugins} builtin_maria_${target}_plugin,")
 180                 SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
 181             ENDIF()
+
 
 
 263 MACRO(CONFIGURE_PLUGINS)
