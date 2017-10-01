@@ -720,9 +720,11 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 # import cmake/plugin.cmake
 INCLUDE(plugin)
 
+# macro CONFIGURE_PLUGINS defined in cmake/plugin.cmake
 # Add storage engines and plugins.
 CONFIGURE_PLUGINS()
 
+# configure sql/sql_builtin.cc, substitute @mysql_mandatory_plugins@ and @mysql_optional_plugins@
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
 
 ```
@@ -733,28 +735,28 @@ CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in ${CMAKE_BINARY_DIR}/sql
 
 ```cmake
 
+# set include directories: -Iinclude -Isql -Ipcre ...
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
+             ${CMAKE_SOURCE_DIR}/sql
+             ${PCRE_INCLUDES}
+             ${SSL_INCLUDE_DIRS}
+             ${ZLIB_INCLUDE_DIR})
+             
+# compile static library: ar rcs lib${target}.a *.o
+ADD_LIBRARY(${target} STATIC ${SOURCES})
 
-40         INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
-41             ${CMAKE_SOURCE_DIR}/sql
-42             ${PCRE_INCLUDES}
-43             ${SSL_INCLUDE_DIRS}
-44             ${ZLIB_INCLUDE_DIR})
- 
-138             ADD_LIBRARY(${target} STATIC ${SOURCES})
+# add library -lxxx
+TARGET_LINK_LIBRARIES (${target} ${ARG_LINK_LIBRARIES})
 
-163             IF(ARG_LINK_LIBRARIES)
-164                 TARGET_LINK_LIBRARIES (${target} ${ARG_LINK_LIBRARIES})
-165             ENDIF()
+# update mysql_mandatory_plugins or mysql_optional_plugins
+SET (mysql_mandatory_plugins
+    "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
+SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
 
-173             IF(ARG_MANDATORY)
-174                 SET (mysql_mandatory_plugins
-175                     "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
-176                 SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
-177             ELSE()
-178                 SET (mysql_optional_plugins
-179                     "${mysql_optional_plugins} builtin_maria_${target}_plugin,")
-180                 SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
-181             ENDIF()
+SET (mysql_optional_plugins
+    "${mysql_optional_plugins} builtin_maria_${target}_plugin,")
+SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
+
 
 
 
