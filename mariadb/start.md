@@ -705,6 +705,8 @@ MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
 #13 main at sql/main.cc:25
 ```
 
+**register_builtin**
+
 ```
 #0  register_builtin (plugin=0x555556e6b240 <builtin_maria_csv_plugin>, tmp=0x7fffffffcf10, ptr=0x7fffffffce40) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1748
 #1  0x0000555555b1a67c in plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=0) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1621
@@ -734,31 +736,4 @@ $8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_mari
   0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
 (gdb) p mysql_mandatory_plugins[3]@1 
 $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
-```
-
-
-
-```
-sql/sql_plugin.cc
-51:extern struct st_maria_plugin *mysql_mandatory_plugins[];
-1586:  for (builtins= mysql_mandatory_plugins; *builtins || mandatory; builtins++)
-1631:  DBUG_ASSERT(plugin_ptr || !mysql_mandatory_plugins[0]);
-2452:    for (builtins= mysql_mandatory_plugins; !err && *builtins; builtins++)
-
-mysqld.symbols
-6179:sql/mysqld:000000000190f3c0 D mysql_mandatory_plugins	/home/grakra/workspace/mariadb/server/sql/sql_builtin.cc:39
-
-sql/sql_builtin.cc.in
-27:  @mysql_mandatory_plugins@ @mysql_optional_plugins@
-39:struct st_maria_plugin *mysql_mandatory_plugins[]=
-45:  @mysql_mandatory_plugins@ 0
-
-extra/mariabackup/encryption_plugin.cc
-15:extern struct st_maria_plugin *mysql_mandatory_plugins[];
-151:  mysql_optional_plugins[0] = mysql_mandatory_plugins[0] = 0;
-
-cmake/plugin.cmake
-174:      SET (mysql_mandatory_plugins  
-175:        "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
-176:      SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
 ```
