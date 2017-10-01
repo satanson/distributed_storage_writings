@@ -478,147 +478,6 @@ gdb sql/mysqld $(ps h -C mysqld -o pid)
 ```
 
 
-
-**legacy_db_type**
-
-```c++
-
-```
-
-
-
-```c++
-
-```
-
-
-
-**get_new_handler**
-
-```
-#0 get_new_handler at sql/handler.cc:251
-#1 TABLE_SHARE::init_from_binary_frm_image at sql/table.cc:1680
-#2 open_table_def at sql/table.cc:669
-#3 tdc_acquire_share at sql/table_cache.cc:825
-#4 open_table at sql/sql_base.cc:1742
-#5 open_and_process_table at sql/sql_base.cc:3409
-#6 open_tables at sql/sql_base.cc:3926
-#7 open_and_lock_tables at sql/sql_base.cc:4682
-#8 open_and_lock_tables at sql/sql_base.h:493
-#9 plugin_load at sql/sql_plugin.cc:1792
-#10 plugin_init at sql/sql_plugin.cc:1670
-#11 init_server_components at sql/mysqld.cc:5256
-#12 mysqld_main at sql/mysqld.cc:5848
-#13 main at sql/main.cc:25
-```
-
-
-
-```
-#0  plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=2)
-    at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1694
-#1  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
-#2  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678)
-    at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
-#3  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc88) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
-```
-
-
-
-```
-sql/sql_plugin.cc
-228:static HASH plugin_hash[MYSQL_MAX_PLUGIN_TYPE_NUM];
-1151:    if (my_hash_insert(&plugin_hash[plugin->type], (uchar*)tmp_plugin_ptr))
-1564:    if (my_hash_init(&plugin_hash[i], system_charset_info, 32, 0, 0,
-1760:  if (my_hash_insert(&plugin_hash[plugin->type],(uchar*) *ptr))
-```
-
-
-
-```
-static bool register_builtin(struct st_maria_plugin *plugin,
-                             struct st_plugin_int *tmp,
-                             struct st_plugin_int **ptr)
-{
-  DBUG_ENTER("register_builtin");
-  tmp->ref_count= 0;
-  tmp->plugin_dl= 0;
-
-  if (insert_dynamic(&plugin_array, (uchar*)&tmp))
-    DBUG_RETURN(1);
-
-  *ptr= *dynamic_element(&plugin_array, plugin_array.elements - 1,
-                         struct st_plugin_int **)=
-        (struct st_plugin_int *) memdup_root(&plugin_mem_root, (uchar*)tmp,
-                                             sizeof(struct st_plugin_int));
-
-  if (my_hash_insert(&plugin_hash[plugin->type],(uchar*) *ptr))
-    DBUG_RETURN(1);
-
-  DBUG_RETURN(0);
-}
-```
-
-
-
-```
-#0  register_builtin (plugin=0x555556e6b240 <builtin_maria_csv_plugin>, tmp=0x7fffffffcf10, ptr=0x7fffffffce40) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1748
-#1  0x0000555555b1a67c in plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=0) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1621
-#2  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
-#3  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678) at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
-#4  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc68) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
-```
-
-
-
-```
-(gdb) p builtins
-$4 = (st_maria_plugin **) 0x555556e633d8 <mysql_mandatory_plugins+24>
-(gdb) p builtins[0]@10
-$5 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
-  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>}
-(gdb) p builtins[0]@24
-$6 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
-  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
-  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>, 0x55555662d0d2, 0x1, 0x0}
-(gdb) p mysql_mandatory_plugins
-$7 = 0x555556e633c0 <mysql_mandatory_plugins>
-(gdb) p mysql_mandatory_plugins[0]@24
-$8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_maria_mysql_password_plugin>, 0x555556e62ea0 <builtin_maria_wsrep_plugin>,
-  0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
-  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
-  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
-(gdb) p mysql_mandatory_plugins[3]@1 
-$9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
-```
-
-
-
-```
-sql/sql_plugin.cc
-51:extern struct st_maria_plugin *mysql_mandatory_plugins[];
-1586:  for (builtins= mysql_mandatory_plugins; *builtins || mandatory; builtins++)
-1631:  DBUG_ASSERT(plugin_ptr || !mysql_mandatory_plugins[0]);
-2452:    for (builtins= mysql_mandatory_plugins; !err && *builtins; builtins++)
-
-mysqld.symbols
-6179:sql/mysqld:000000000190f3c0 D mysql_mandatory_plugins	/home/grakra/workspace/mariadb/server/sql/sql_builtin.cc:39
-
-sql/sql_builtin.cc.in
-27:  @mysql_mandatory_plugins@ @mysql_optional_plugins@
-39:struct st_maria_plugin *mysql_mandatory_plugins[]=
-45:  @mysql_mandatory_plugins@ 0
-
-extra/mariabackup/encryption_plugin.cc
-15:extern struct st_maria_plugin *mysql_mandatory_plugins[];
-151:  mysql_optional_plugins[0] = mysql_mandatory_plugins[0] = 0;
-
-cmake/plugin.cmake
-174:      SET (mysql_mandatory_plugins  
-175:        "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
-176:      SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
-```
-
 *CMakeLists.txt*
 
 ```cmake
@@ -820,4 +679,86 @@ MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
    };     
    ```
 
-   ​
+
+
+
+----
+
+
+
+**get_new_handler**
+
+```
+#0 get_new_handler at sql/handler.cc:251
+#1 TABLE_SHARE::init_from_binary_frm_image at sql/table.cc:1680
+#2 open_table_def at sql/table.cc:669
+#3 tdc_acquire_share at sql/table_cache.cc:825
+#4 open_table at sql/sql_base.cc:1742
+#5 open_and_process_table at sql/sql_base.cc:3409
+#6 open_tables at sql/sql_base.cc:3926
+#7 open_and_lock_tables at sql/sql_base.cc:4682
+#8 open_and_lock_tables at sql/sql_base.h:493
+#9 plugin_load at sql/sql_plugin.cc:1792
+#10 plugin_init at sql/sql_plugin.cc:1670
+#11 init_server_components at sql/mysqld.cc:5256
+#12 mysqld_main at sql/mysqld.cc:5848
+#13 main at sql/main.cc:25
+```
+
+```
+#0  register_builtin (plugin=0x555556e6b240 <builtin_maria_csv_plugin>, tmp=0x7fffffffcf10, ptr=0x7fffffffce40) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1748
+#1  0x0000555555b1a67c in plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=0) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1621
+#2  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
+#3  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678) at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
+#4  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc68) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
+```
+
+
+
+```
+(gdb) p builtins
+$4 = (st_maria_plugin **) 0x555556e633d8 <mysql_mandatory_plugins+24>
+(gdb) p builtins[0]@10
+$5 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>}
+(gdb) p builtins[0]@24
+$6 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>, 0x55555662d0d2, 0x1, 0x0}
+(gdb) p mysql_mandatory_plugins
+$7 = 0x555556e633c0 <mysql_mandatory_plugins>
+(gdb) p mysql_mandatory_plugins[0]@24
+$8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_maria_mysql_password_plugin>, 0x555556e62ea0 <builtin_maria_wsrep_plugin>,
+  0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
+(gdb) p mysql_mandatory_plugins[3]@1 
+$9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
+```
+
+
+
+```
+sql/sql_plugin.cc
+51:extern struct st_maria_plugin *mysql_mandatory_plugins[];
+1586:  for (builtins= mysql_mandatory_plugins; *builtins || mandatory; builtins++)
+1631:  DBUG_ASSERT(plugin_ptr || !mysql_mandatory_plugins[0]);
+2452:    for (builtins= mysql_mandatory_plugins; !err && *builtins; builtins++)
+
+mysqld.symbols
+6179:sql/mysqld:000000000190f3c0 D mysql_mandatory_plugins	/home/grakra/workspace/mariadb/server/sql/sql_builtin.cc:39
+
+sql/sql_builtin.cc.in
+27:  @mysql_mandatory_plugins@ @mysql_optional_plugins@
+39:struct st_maria_plugin *mysql_mandatory_plugins[]=
+45:  @mysql_mandatory_plugins@ 0
+
+extra/mariabackup/encryption_plugin.cc
+15:extern struct st_maria_plugin *mysql_mandatory_plugins[];
+151:  mysql_optional_plugins[0] = mysql_mandatory_plugins[0] = 0;
+
+cmake/plugin.cmake
+174:      SET (mysql_mandatory_plugins  
+175:        "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
+176:      SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
+```
