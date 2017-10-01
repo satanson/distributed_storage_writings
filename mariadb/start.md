@@ -718,7 +718,7 @@ ENDMACRO()
 
 
 
-*`sql/sql_builtin.cc.in, sql/sql_builtin.cc`*
+*sql/sql_builtin.cc.in, sql/sql_builtin.cc*
 
 ```c++
 extern builtin_maria_plugin builtin_maria_csv_plugin ...;
@@ -730,7 +730,7 @@ struct st_maria_plugin *mysql_mandatory_plugins[]= {
 
 ```
 
-*`storage/csv/ha_tina.cc`*
+*storage/csv/ha_tina.cc*
 
 ```c++
 maria_declare_plugin(csv)
@@ -781,3 +781,17 @@ struct st_maria_plugin
 };
 ```
 
+
+
+*storage/csv/CMakeLists.txt*
+
+```cmake
+SET(CSV_SOURCES  ha_tina.cc ha_tina.h transparent_file.cc transparent_file.h)
+MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
+```
+
+
+
+**Add a new storage engine to MariaDB**
+
+1. implement handler and handlerton
