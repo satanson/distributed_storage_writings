@@ -711,5 +711,50 @@ cmake/plugin.cmake
 
 ```
 
-#
+*CMakeLists.txt*
+
+```cmake
+159 INCLUDE(plugin)
+
+369 # Add storage engines and plugins.
+370 CONFIGURE_PLUGINS()
+
+433 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in
+434     ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
+
+```
+
+
+
+*cmake/plugin.cmake*
+
+```cmake
+263 MACRO(CONFIGURE_PLUGINS)
+264     IF(NOT WITHOUT_SERVER)
+265         FILE(GLOB dirs_storage ${CMAKE_SOURCE_DIR}/storage/*)
+266     ENDIF()
+267 
+268     FILE(GLOB dirs_plugin ${CMAKE_SOURCE_DIR}/plugin/*)
+269     FOREACH(dir ${dirs_storage} ${dirs_plugin})
+270         IF (EXISTS ${dir}/CMakeLists.txt)
+271             ADD_SUBDIRECTORY(${dir})
+272         ENDIF()
+273     ENDFOREACH()
+274 
+275     GET_CMAKE_PROPERTY(ALL_VARS VARIABLES)
+276     FOREACH (V ${ALL_VARS})
+277         IF (V MATCHES "^PLUGIN_" AND ${V} MATCHES "YES")
+278             STRING(SUBSTRING ${V} 7 -1 plugin)
+279             STRING(TOLOWER ${plugin} target)
+280             IF (NOT TARGET ${target})
+281                 MESSAGE(FATAL_ERROR "Plugin ${plugin} cannot be built")
+282             ENDIF()
+283         ENDIF()
+284     ENDFOREACH()
+285 ENDMACRO()
+
+
+```
+
+
 
