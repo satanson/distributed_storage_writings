@@ -792,6 +792,25 @@ MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
 
 
 
-**Add a new storage engine to MariaDB**
+**Add a new storage engine named 'foobar' to MariaDB**
 
-1. implement handler and handlerton
+1. implementation ha_foobar inherited from handler in storage/foobar/ha_foobar.{cc, h}
+
+2. add codes as follow to ha_foobar.cc
+
+   ```C++
+   #include<my_global.h>
+
+   maria_declare_plugin(foobar)
+   {
+       ...
+   }
+   maria_declare_plugin_end;
+   ```
+
+3. write storage/foobar/CMakeLists.txt
+
+   ```c++
+   MYSQL_ADD_PLUGIN(foobar ha_foobar.cc ...  STORAGE_ENGINE MANDATORY)
+   ```
+
