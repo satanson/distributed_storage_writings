@@ -737,3 +737,12 @@ $8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_mari
 (gdb) p mysql_mandatory_plugins[3]@1 
 $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
 ```
+
+
+
+**plugin_init**
+
+1. add plugin from mysql\_{mandatory, optional}\_plugins to plugin\_array and  plugin\_hash
+2. call plugin\_initialize to initialize each plugin in plugin\_array.
+3. global plugin_type_initialize table has a corresponding entry for each plugin type. and the entry is function pointer or null pointer. 
+
