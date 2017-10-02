@@ -744,5 +744,7 @@ $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
 
 1. add plugin from mysql\_{mandatory, optional}\_plugins to plugin\_array and  plugin\_hash
 2. call plugin\_initialize to initialize each plugin in plugin\_array.
-3. global plugin_type_initialize table has a corresponding entry for each plugin type. and the entry is function pointer or null pointer. 
-
+3. global plugin_type_initialize table has a corresponding entry for each plugin type. and the entry is function pointer or nil, alternatively.
+4. if the entry is function pointer, then invoke it to initialize the plugin.
+5. otherwise, call plugin-specific init function if it exists.
+6. ​
