@@ -99,3 +99,22 @@ struct charset_info_st my_charset_latin1=
 #define my_strnncoll(s, a, b, c, d) ((s)->coll->strnncoll((s), (a), (b), (c), (d), 0))
 ```
 
+
+
+**my_strnncoll_gbk_chinese_ci**
+
+strings/strcoll.ic
+
+```c++
+static int
+MY_FUNCTION_NAME(strnncoll)(CHARSET_INFO *cs __attribute__((unused)),
+                            const uchar *a, size_t a_length, 
+                            const uchar *b, size_t b_length,
+                            my_bool b_is_prefix)
+
+static inline uint
+MY_FUNCTION_NAME(scan_weight)(int *weight, const uchar *str, const uchar *end)
+```
+
+
+
