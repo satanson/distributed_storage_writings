@@ -69,6 +69,29 @@ MySQL test framework
   mtr start server or servers as needed, use ports int the range 13000 by default.
   ```
 
+- run tests in parallel
+
+  ```
+  run several mysqltest instance should use different log dir, --vardir.
+
+  run multi-thread in a single mtr use --parallel
+  --parallel=auto: pick a value automaticlly.
+  environment MTR_PARALLEL
+  ```
+
+
+
+**writing test cases**
+
+- test case: a separated test file
+- test case: contain test sequence, a number of individual tests that are grouped together in the same test file.
+- command: input test that mysqltest recognizes and executable itself.
+- statement: an SQL statement sent to MySQL server to be executed.
 - ​
 
-- ​
+
+
+
+
+**unit test**
+
