@@ -115,5 +115,72 @@ MySQL test framework
 
 
 
+**TAP**
+
+- plan(num)
+
+  ```
+  #: expected number of tests to run
+  no_plan: use done_test to issue a plan when finish running tests.
+  skip_all: not run any tests
+  ```
+
+- assertion
+
+  ```
+  ok($got, $testname)
+
+  is/isnt($got, $expected, $test_name)
+
+
+  not ok ${testnumber} - ${testname}
+  #   Failed test ${testname}
+  #   at ${filename} line ${linenumber}.
+  #          got: ${got}
+  #     expected: ${expected}
+
+  like/unlike( $got, qr/expected/, $test_name )
+
+  cmp_ok( $got, $op, $expected, $test_name )
+
+  can_ok($module, @methods)
+  isa_ok($object,   $class, $object_name)
+  new_ok( $class );
+  subtest $name => \&code, @args;
+  pass($test_name);
+  fail($test_name);
+  require_ok($module);
+  BEGIN { use_ok($module); }
+  is_deeply( $got, $expected, $test_name );
+
+  diag(@diagnostic_message);
+  note(@diagnostic_message);
+  my @dump = explain @diagnostic_message;
+  SKIP: something the user might not be able to do
+  TODO: something the programmer hasn't done yet
+
+  BAIL_OUT: test fail with exit code 255
+
+  exit code
+  0                   all tests successful
+  255                 test died or all passed but wrong # of tests run
+  any other number    how many failed (including missing or extras)
+
+
+
+
+  ```
+
+  ​
+
+**tap specs**
+
+- version
+- plan
+- test
+- comment
+
+
+
 **Unit Testing Using the Google Test Framework**
 
