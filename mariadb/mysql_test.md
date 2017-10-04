@@ -200,5 +200,11 @@ MySQL test framework
 
 
 
+failed TODO tests was not taken into account when aggregating test results.
+
+SKIP tests will be passed if  they are skipped.
+
+
+
 **Unit Testing Using the Google Test Framework**
 
