@@ -95,3 +95,25 @@ MySQL test framework
 
 **unit test**
 
+- ```
+  # top-level Makefile
+  # invoke executable with "-t" suffix, recursively
+  make test-unit
+  ```
+
+
+
+**Unit Testing Using TAP**
+
+
+
+**TAP**: Test Anything Protocol, from Perl
+
+**unittest/mytap**: MyTAP protocol code
+
+**xxx-t.c**: base name  of test case file having suffix "-t"
+
+
+
+**Unit Testing Using the Google Test Framework**
+
