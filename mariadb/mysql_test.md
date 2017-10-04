@@ -179,9 +179,15 @@ MySQL test framework
 - plan `1..n`
   - first line: `plan(n)`
   - last line: `done_testing(n)`
-  - ​
+  - skip_all: `1..n # skip`,  `qr/^1..\d+\s+#\s*skip.*$/i`  skip is case-insensitive
+  - no_plan: 1..n absent
 - test
+  - `qr/(not )?ok(\s+\d+)?(\s+[^#\n\r]+)?(#\s*(TODO|SKIP).*)?/i`
+  - one mandatory component: ok, not ok
+  - three optional components: test number,  description, directive
+  - directive: TODO, SKIP 
 - comment
+  - ​
 - directive
 - yaml
 
