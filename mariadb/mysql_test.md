@@ -175,10 +175,15 @@ MySQL test framework
 
 **tap specs**
 
-- version
-- plan
+- version  `TAP version 13`
+- plan `1..n`
+  - first line: `plan(n)`
+  - last line: `done_testing(n)`
+  - ​
 - test
 - comment
+- directive
+- yaml
 
 
 
