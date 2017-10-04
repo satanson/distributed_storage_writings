@@ -210,9 +210,17 @@ TAP is text-based interface between testing modules
 
 
 
-TAP producer --> TAP stream --> 
-
-
-
 **Unit Testing Using the Google Test Framework**
 
+- xUnit
+- JUnit-style XML
+- Hudson
+
+
+
+- debug info
+- assertion, user-defined predicate assertion
+- value/type-parameterized tests
+- test event listener API
+- test filtering/shuffling
+- ​
