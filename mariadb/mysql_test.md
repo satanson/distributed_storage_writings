@@ -206,5 +206,13 @@ SKIP tests will be passed if  they are skipped.
 
 
 
+TAP is text-based interface between testing modules
+
+
+
+TAP producer --> TAP stream --> 
+
+
+
 **Unit Testing Using the Google Test Framework**
 
