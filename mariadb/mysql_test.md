@@ -186,7 +186,7 @@ MySQL test framework
   - one mandatory component: ok, not ok
   - three optional components: test number,  description, directive
   - directive: TODO, SKIP 
-- comment
+- comment/diagnostic
   - `qr/^#.*$/`
 - directive
   - TODO
