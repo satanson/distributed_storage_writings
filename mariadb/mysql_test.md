@@ -227,4 +227,28 @@ TAP is text-based interface between testing modules
 
 
 - TEST(), TEST_F()
-- ​
+
+
+
+**in action**
+
+- build
+
+```
+git clone https://github.com/google/googletest.git
+git checkout release-1.8.0
+mkdir build && cd build && cmake ../
+make
+find -name "*.a"
+
+./googlemock/libgmock_main.a
+./googlemock/libgmock.a
+./googlemock/gtest/libgtest_main.a
+./googlemock/gtest/libgtest.a
+
+../googletest/include/gtest/gtest.h
+
+
+```
+
+
