@@ -239,25 +239,110 @@ git clone https://github.com/google/googletest.git
 git checkout release-1.8.0
 mkdir build && cd build && cmake ../
 make
-find -name "*.a"
+```
 
-./build/googlemock/libgmock_main.a
-./build/googlemock/libgmock.a
-./build/googlemock/gtest/libgtest_main.a
-./build/googlemock/gtest/libgtest.a
+- write a script `compile.sh`
 
-./googletest/include/gtest/gtest.h
+```shell
+#!/bin/bash
 
-GTEST_ROOT=/home/grakra/workspace/googletest
--L${GTEST_ROOT}/build/googlemock
--l{gmock, gmock_main, gtest, gtest_main}
--I${GTEST_ROOT}/googletest/include
+export GTEST_ROOT=/home/grakra/workspace/googletest
 #include<gtest/gtest.h>
--I${GTEST_ROOT}/googlemock/include
 #include<gtest/gmock.h>
+FLAGS="-I${GTEST_ROOT}/googlemock/include \
+	-I${GTEST_ROOT}/googletest/include \
+	-L${GTEST_ROOT}/build/googlemock/gtest \
+	-L${GTEST_ROOT}/build/googlemock"
 
+LIBS="$(eval 'echo -l{gmock,gmock_main,gtest,gtest_main}') -lpthread"
 
+files=$*
+[ -z "$files" ] && files=$(echo *.cc)
+
+for f in $files;do
+	ff=$(echo $f |perl -ne 'print $1 if m{^(?:.*/)?([^/]+)$}')
+	t=${ff%%.cc}
+	[ "${ff}" = "$t" ] && continue
+	echo g++ $FLAGS -o $t $f $LIBS
+	g++ $FLAGS -o $t $f $LIBS
+done
+```
+
+- try TEST (without test fixture) and write `etudes0.cc`
+
+```c++
+#include<gtest/gtest.h>
+
+int add(int a, int b){return a+b;}
+
+TEST(AddTestCase, AddZeroAndZero){
+	EXPECT_EQ(0, add(0,0))<<"add(0,0)==0";
+}
+
+TEST(AddTestCase, AddZeroAndOne){
+	EXPECT_EQ(1, add(0,1))<<"add(0,1)==1";
+}
+
+TEST(AddTestCase, AddTwoAndOne){
+	EXPECT_EQ(1, add(2,1))<<"add(2,1)==1";
+}
 
 ```
 
+
+
+- try TEST_F(with test fixture) and write etudes1.cc
+
+```c++
+#include<iostream>
+#include<string>
+using namespace std;
+#include<gtest/gtest.h>
+
+int add(int a, int b){return a+b;}
+
+class  AddTestCase: public ::testing::Test{
+public:
+	AddTestCase(){
+		cout << "AddTestCase ctor"<<endl;
+	}
+	~AddTestCase(){
+		cout << "AddTestCase dtor"<<endl;
+	}
+	void SetUp(){
+		cout << "SetUp" <<endl;
+	}
+	
+	void TearDown(){
+		cout << "TearDown" <<endl;
+	}
+};
+
+TEST_F(AddTestCase, AddZeroAndZero){
+	EXPECT_EQ(0, add(0,0))<<"add(0,0)==0";
+}
+
+TEST_F(AddTestCase, AddZeroAndOne){
+	EXPECT_EQ(1, add(0,1))<<"add(0,1)==1";
+}
+
+TEST_F(AddTestCase, AddTwoAndOne){
+	EXPECT_EQ(1, add(2,1))<<"add(2,1)==1";
+}
+
+```
+
+- compile and run tests
+
+```
+./compile.sh
+# for help
+./etudes0 -h
+# list all tests
+./etudes0 --gtest_list_tests
+# run all tests
+./etudes0
+# run tests match regex
+./etudes0 --gtest_filter=AddTestCase.AddTwoAndOne
+```
 
