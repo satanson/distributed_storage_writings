@@ -350,6 +350,9 @@ TEST_F(AddTestCase, AddTwoAndOne){
 
 **gtest basic**
 
+- see [gtest primer](https://github.com/google/googletest/blob/master/googletest/docs/Primer.md)
+
+
 - test:  `TEST/TEST_F(testCaseName, testName)`, 
 
   ```
@@ -390,3 +393,19 @@ TEST_F(AddTestCase, AddTwoAndOne){
 
   ​
 
+- misc
+
+  ```
+  1. invoke InitGoogleTest and RUN_ALL_TESTS in main function
+  2. InitGoogleTest must invoked before RUN_ALL_TESTS
+  3. must invoke RUN_ALL_TESTS once and return its result.
+
+  int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+  }
+
+  4. not write main function, but link libgtest_main instead for common cases.
+  ```
+
+  ​
