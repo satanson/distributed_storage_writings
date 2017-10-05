@@ -346,3 +346,45 @@ TEST_F(AddTestCase, AddTwoAndOne){
 ./etudes0 --gtest_filter=AddTestCase.AddTwoAndOne
 ```
 
+
+
+**gtest basic**
+
+- test:  `TEST/TEST_F(testCaseName, testName)`, 
+
+  ```
+  A test is an individual void function defined by TEST or TEST_F,
+  a test has unique full name consists of test case name and test name,
+  both of which are valid c identifiers containing no underscore.
+  ```
+
+- test case: related tests grouped together to share the same data or functions
+
+  ```
+  A test case is a set of related tests with the same test case name,
+  tests in a test case may have a common test fixture,
+  which do some precondition and postcondition processing,
+  ```
+
+- test fixture:
+
+  ```
+  A test fixture is a class derived from ::testing::Test publicly,
+  tests with fixture defined by TEST_F and the test case name must be fixture name.
+  test fixtures has ctor/SetUp and dtor/TearDown to do precondition and postcondition processing.
+  tests are performed on isolated objects of test fixtures,
+  so do not warry about one test's result affects another's
+  ```
+
+- assertion:  `{ASSERT,EXPECT}_*()<<"diagnostic message"`
+
+  ```
+  1. {ASSERT,EXPECT}_{EQ,NE,LT,GT,LE,GE,TRUE,FALSE}
+  2. {ASSERT,EXPECT}_STR{EQ,NE,CASEEQ,CASENE} for c string
+  3. ASSERT abruptly returns, while EXPECT keep going upon failures
+  4. for builtins, class has overloaded operator "==", "<" ">" and "<<", assertion work well.
+  5. for user-defined class, user must provide comparison operator and stream operator, since v1.6.0, gtest provides try-the-best default stringify function.
+  6. 
+  ```
+
+  ​
