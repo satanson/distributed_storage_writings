@@ -384,7 +384,9 @@ TEST_F(AddTestCase, AddTwoAndOne){
   3. ASSERT abruptly returns, while EXPECT keep going upon failures
   4. for builtins, class has overloaded operator "==", "<" ">" and "<<", assertion work well.
   5. for user-defined class, user must provide comparison operator and stream operator, since v1.6.0, gtest provides try-the-best default stringify function.
-  6. 
+  6. for pointer, assertion just compare addresses of pointers, it works unexpectedly for c string.
+  7. for c string, use {ASSERT,EXPECT}_STR{EQ,NE,CASEEQ,CASENE}
   ```
 
   ​
+
