@@ -241,12 +241,21 @@ mkdir build && cd build && cmake ../
 make
 find -name "*.a"
 
-./googlemock/libgmock_main.a
-./googlemock/libgmock.a
-./googlemock/gtest/libgtest_main.a
-./googlemock/gtest/libgtest.a
+./build/googlemock/libgmock_main.a
+./build/googlemock/libgmock.a
+./build/googlemock/gtest/libgtest_main.a
+./build/googlemock/gtest/libgtest.a
 
-../googletest/include/gtest/gtest.h
+./googletest/include/gtest/gtest.h
+
+GTEST_ROOT=/home/grakra/workspace/googletest
+-L${GTEST_ROOT}/build/googlemock
+-l{gmock, gmock_main, gtest, gtest_main}
+-I${GTEST_ROOT}/googletest/include
+#include<gtest/gtest.h>
+-I${GTEST_ROOT}/googlemock/include
+#include<gtest/gmock.h>
+
 
 
 ```
