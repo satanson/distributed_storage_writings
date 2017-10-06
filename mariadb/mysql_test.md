@@ -54,7 +54,7 @@ MySQL test framework
   # run test suite
   ./mysql-test-run.pl --force --suite=binlog
   ```
-[mysql-test-run.pl options](https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_MYSQL_TEST_RUN_PL.html)
+  [mysql-test-run.pl options](https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_MYSQL_TEST_RUN_PL.html)
 
 - ```
   ./mysql-test-run.pl --do-test=prefix
@@ -160,15 +160,9 @@ MySQL test framework
   0                   all tests successful
   255                 test died or all passed but wrong # of tests run
   any other number    how many failed (including missing or extras)
-
-
-
-
   ```
 
-  ​
-
-**tap specs**
+​ **tap specs**
 
 - version  `TAP version 13`
 - plan `1..n`
@@ -203,8 +197,10 @@ SKIP tests will be passed if  they are skipped.
 
 TAP is text-based interface between testing modules
 
+[C++ Tap testing](http://testanything.org/testing-with-tap/c-plus-plus.html)
 
-​```c++
+
+```c++
 #include <tap++/tap++.h>
 #include <string>
 using namespace TAP;
@@ -219,7 +215,7 @@ template<typename T, typename U> bool
     is(  const T& got, const U& expected, std::string& test_name = "");
 template<typename T, typename U> bool
     isnt(  const T& got, const U& expected, std::string& test_name = "");
-   
+
 bool pass(const std::string& test_name = "");
 bool fail(const std::string& test_name = "");
 void skip(int number, const std::string& reason = "");
@@ -235,7 +231,7 @@ other number        how many failed (including missing or extras)
 
 int exit_status();
 void bail_out(const std::string& reason);
-  ```
+```
 
 
 **Unit Testing Using the Google Test Framework**
@@ -262,16 +258,17 @@ void bail_out(const std::string& reason);
 
 - build
 
-```
-git clone https://github.com/google/googletest.git
-git checkout release-1.8.0
-mkdir build && cd build && cmake ../
-make
+  ```
+  git clone https://github.com/google/googletest.git
+  git checkout release-1.8.0
+  mkdir build && cd build && cmake ../
+  make
+  ```
 ```
 
 - write a script `compile.sh`
 
-```shell
+​```shell
 #!/bin/bash
 
 export GTEST_ROOT=/home/grakra/workspace/googletest
@@ -438,38 +435,7 @@ TEST_F(AddTestCase, AddTwoAndOne){
 
   ​
 
-```c++
-#include <tap++/tap++.h>
-#include <string>
-using namespace TAP;
-void plan(int number_of_tests);
-void plan(skip_all, const std::string& reason="");
-void plan(no_plan);
-void done_testing();
-void done_testing(int number_of_tests);
 
-bool ok(bool condition, const std::string& test_name = "");
-template<typename T, typename U> bool
-    is(  const T& got, const U& expected, std::string& test_name = "");
-template<typename T, typename U> bool
-    isnt(  const T& got, const U& expected, std::string& test_name = "");
-   
-bool pass(const std::string& test_name = "");
-bool fail(const std::string& test_name = "");
-void skip(int number, const std::string& reason = "");
-diag(diagnostic_message...);
-note(diagnostic_message...);
-void set_output(std::ofstream& new_output);
-void set_error(std::ofstream& new_error);
-
-exit_status()
-0                   all tests successful
-255                 test died or all passed but wrong # of tests runany 
-other number        how many failed (including missing or extras)
-
-int exit_status();
-void bail_out(const std::string& reason);
-```
 
 
 
