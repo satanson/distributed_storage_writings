@@ -409,3 +409,39 @@ TEST_F(AddTestCase, AddTwoAndOne){
   ```
 
   ​
+
+
+
+
+
+```
+#include <tap++/tap++.h>
+#include <string>
+
+using namespace TAP;
+
+void plan(int number_of_tests);
+void plan(skip_all, const std::string& reason="");
+void plan(no_plan);
+void done_testing();
+void done_testing(int number_of_tests);
+bool ok(bool condition, const std::string& test_name = "");
+template<typename T, typename U> bool is(
+  const T& got, const U& expected, std::string& test_name = "");
+template<typename T, typename U> bool isnt(
+  const T& got, const U& expected, std::string& test_name = "");
+bool pass(const std::string& test_name = "");
+bool fail(const std::string& test_name = "");
+void skip(int number, const std::string& reason = "");
+diag(diagnostic_message...);
+note(diagnostic_message...);
+void set_output(std::ofstream& new_output);
+void set_error(std::ofstream& new_error);
+exit_status()
+0                   all tests successful
+255                 test died or all passed but wrong # of tests run
+any other number    how many failed (including missing or extras)
+int exit_status();
+void bail_out(const std::string& reason);
+```
+
