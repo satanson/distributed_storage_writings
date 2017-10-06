@@ -42,6 +42,7 @@ MySQL test framework
    cmake -DWITH_DEBUG
    mysql-test-run.pl --debug test_name
    # mysql-test/var/tmp/master.trace
+   ```
   ```
 
 - ```
@@ -131,6 +132,7 @@ MySQL test framework
   ok($got, $testname)
 
   is/isnt($got, $expected, $test_name)
+  ```
 
 
   not ok ${testnumber} - ${testname}
@@ -208,6 +210,39 @@ SKIP tests will be passed if  they are skipped.
 
 TAP is text-based interface between testing modules
 
+
+​```c++
+#include <tap++/tap++.h>
+#include <string>
+using namespace TAP;
+void plan(int number_of_tests);
+void plan(skip_all, const std::string& reason="");
+void plan(no_plan);
+void done_testing();
+void done_testing(int number_of_tests);
+
+bool ok(bool condition, const std::string& test_name = "");
+template<typename T, typename U> bool
+    is(  const T& got, const U& expected, std::string& test_name = "");
+template<typename T, typename U> bool
+    isnt(  const T& got, const U& expected, std::string& test_name = "");
+   
+bool pass(const std::string& test_name = "");
+bool fail(const std::string& test_name = "");
+void skip(int number, const std::string& reason = "");
+diag(diagnostic_message...);
+note(diagnostic_message...);
+void set_output(std::ofstream& new_output);
+void set_error(std::ofstream& new_error);
+
+exit_status()
+0                   all tests successful
+255                 test died or all passed but wrong # of tests runany 
+other number        how many failed (including missing or extras)
+
+int exit_status();
+void bail_out(const std::string& reason);
+  ```
 
 
 **Unit Testing Using the Google Test Framework**
@@ -410,26 +445,22 @@ TEST_F(AddTestCase, AddTwoAndOne){
 
   ​
 
-
-
-
-
-```
+```c++
 #include <tap++/tap++.h>
 #include <string>
-
 using namespace TAP;
-
 void plan(int number_of_tests);
 void plan(skip_all, const std::string& reason="");
 void plan(no_plan);
 void done_testing();
 void done_testing(int number_of_tests);
+
 bool ok(bool condition, const std::string& test_name = "");
-template<typename T, typename U> bool is(
-  const T& got, const U& expected, std::string& test_name = "");
-template<typename T, typename U> bool isnt(
-  const T& got, const U& expected, std::string& test_name = "");
+template<typename T, typename U> bool
+    is(  const T& got, const U& expected, std::string& test_name = "");
+template<typename T, typename U> bool
+    isnt(  const T& got, const U& expected, std::string& test_name = "");
+   
 bool pass(const std::string& test_name = "");
 bool fail(const std::string& test_name = "");
 void skip(int number, const std::string& reason = "");
@@ -437,11 +468,17 @@ diag(diagnostic_message...);
 note(diagnostic_message...);
 void set_output(std::ofstream& new_output);
 void set_error(std::ofstream& new_error);
+
 exit_status()
-0                   all tests successful
-255                 test died or all passed but wrong # of tests run
-any other number    how many failed (including missing or extras)
+0                   all tests successful
+255                 test died or all passed but wrong # of tests runany 
+other number        how many failed (including missing or extras)
+
 int exit_status();
 void bail_out(const std::string& reason);
 ```
+
+
+
+
 
