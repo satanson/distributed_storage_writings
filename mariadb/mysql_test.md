@@ -43,11 +43,8 @@ MySQL test framework
    mysql-test-run.pl --debug test_name
    # mysql-test/var/tmp/master.trace
    ```
-  ```
 
-- ```
-   mysql-test-run.pl --force
-  ```
+- ```mysql-test-run.pl --force```
 
 - ```
   mysql-test-run.pl --gdb test_name
@@ -57,7 +54,6 @@ MySQL test framework
   # run test suite
   ./mysql-test-run.pl --force --suite=binlog
   ```
-
 [mysql-test-run.pl options](https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_MYSQL_TEST_RUN_PL.html)
 
 - ```
@@ -132,9 +128,6 @@ MySQL test framework
   ok($got, $testname)
 
   is/isnt($got, $expected, $test_name)
-  ```
-
-
   not ok ${testnumber} - ${testname}
   #   Failed test ${testname}
   #   at ${filename} line ${linenumber}.
