@@ -437,6 +437,33 @@ TEST_F(AddTestCase, AddTwoAndOne){
 
 
 
+**mysql-8.0.3**
+
+```diff
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 20c829bcc6b..3d0605ccaad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -417,7 +417,7 @@ ENDIF()
+ 
+ 
+ # Always enable debug sync for debug builds.
+-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC")
++SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC -g -O0 -rdynamic -fno-inline -Wno-error")
+ SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC")
+  
+ # Older versions of ccache must be disabled: export CCACHE_DISABLE=1
+
+```
+
+
+
+```shell
+cmake -DCMAKE_BUILD_TYPE=Debug  -DENABLE_DOWNLOADS=1 -H. -Bdebug
+```
+
+
+
 
 
 
