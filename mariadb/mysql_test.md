@@ -462,7 +462,13 @@ index 20c829bcc6b..3d0605ccaad 100644
 cmake -DCMAKE_BUILD_TYPE=Debug  -DENABLE_DOWNLOADS=1 -H. -Bdebug
 ```
 
+```
+cd debug && make test-unit
+```
 
+```
+debug/runtime_output_directory/{merge,large}_small_tests-t
+```
 
 
 
