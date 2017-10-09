@@ -779,3 +779,14 @@ $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
 
 6. ​
 
+
+
+
+## 9. port gunit from mysql to mariadb
+
+
+
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -rdynamic -fno-inline -Wno-error" -H. -Bdebug -DENABLE_DOWNLOADS=1
+```
+
