@@ -839,3 +839,11 @@ MACRO (MY_CHECK_C_COMPILER_FLAG flag)
 ENDMACRO()
 ```
 
+
+
+could not find load file
+
+```
+{lz4,lzo,lzma,bzip2,snappy}.cmake
+```
+
