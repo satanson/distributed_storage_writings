@@ -793,7 +793,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -rdynamic -fno-in
 
 
 ```cmake
-#mysql-server-020025d9f277fd3283b8c75024f590857f58fbbd/CMakeLists.txt:332
+#mysql-server#020025d9f277fd3283b8c75024f590857f58fbbd/CMakeLists.txt:332
 MACRO (MY_CHECK_CXX_COMPILER_FLAG FLAG RESULT)
   SET(SAVE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
   SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${FLAG}")
@@ -810,5 +810,32 @@ MACRO (MY_CHECK_CXX_COMPILER_FLAG FLAG RESULT)
   SET(CMAKE_REQUIRED_FLAGS "${SAVE_CMAKE_REQUIRED_FLAGS}")
 ENDMACRO()
 
+```
+
+
+
+```cmake
+#mariodb/server#c548fb0667ffe71d9387eaec342b1716fc4c9526/cmake/check_compiler_flag.cmake
+
+SET(fail_patterns
+    FAIL_REGEX "argument unused during compilation"
+    FAIL_REGEX "unsupported .*option"
+    FAIL_REGEX "unknown .*option"
+    FAIL_REGEX "unrecognized .*option"
+    FAIL_REGEX "ignoring unknown option"
+    FAIL_REGEX "warning:.*ignored"
+    FAIL_REGEX "warning:.*is valid for.*but not for"
+    FAIL_REGEX "warning:.*redefined"
+    FAIL_REGEX "[Ww]arning: [Oo]ption"
+    )   
+
+MACRO (MY_CHECK_C_COMPILER_FLAG flag)
+  STRING(REGEX REPLACE "[-,= +]" "_" result "have_C_${flag}")
+  SET(SAVE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+  SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${flag}")
+  CHECK_C_SOURCE_COMPILES("int main(void) { return 0; }" ${result}
+    ${fail_patterns})
+  SET(CMAKE_REQUIRED_FLAGS "${SAVE_CMAKE_REQUIRED_FLAGS}")
+ENDMACRO()
 ```
 
