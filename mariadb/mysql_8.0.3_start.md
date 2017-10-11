@@ -2,6 +2,8 @@
 
 ## 1. compile debug version of mysql_8.0.3
 
+
+
 ```
 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -rdynamic -fno-inline -Wno-error"
 
