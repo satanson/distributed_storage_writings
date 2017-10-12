@@ -493,7 +493,6 @@ CONFIGURE_PLUGINS()
 
 # configure sql/sql_builtin.cc, substitute @mysql_mandatory_plugins@ and @mysql_optional_plugins@
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
-
 ```
 
 
@@ -777,7 +776,17 @@ $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
 
 5. otherwise, call plugin-specific init function if it exists.
 
-6. ​
+
+
+
+
+```
+// sql/discover.cc +189 int extension_based_table_discovery
+
+```
+
+
+
 
 
 
