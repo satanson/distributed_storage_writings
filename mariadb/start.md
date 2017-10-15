@@ -758,6 +758,16 @@ $9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
          goto err; 
        }    
      }
+     else if (plugin->plugin->init)
+     {
+       if (plugin->plugin->init(plugin))
+       {
+         sql_print_error("Plugin '%s' init function returned error.",
+                         plugin->name.str);
+         goto err; 
+       }    
+     }
+     state= PLUGIN_IS_READY; // plugin->init() succeeded
 
    // plugin_type_initialize at sql/sql_plugin.cc:111
    plugin_type_init plugin_type_initialize[MYSQL_MAX_PLUGIN_TYPE_NUM]=
