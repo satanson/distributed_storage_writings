@@ -293,3 +293,7 @@ du  -sb ./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/s
 - meta file naming convention
 - meta contain crc checksum for each chunk(512Bytes) of data, extra 3 bytes is used for what?
 
+
+
+htrace for distributed trace
+
