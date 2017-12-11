@@ -261,3 +261,35 @@ export HADOOP_NAMENODE_OPTS="-Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPT
 
 ## DataNode
 
+
+
+
+
+# 3.0.0.beta
+
+INodeFile, BlockCollection, Block, Packet(64KB, 65016B, 126Chunk), Chunk(516B, 512B Data+4B Checksum)
+DataStreamer
+
+
+
+DataStreamer:  pipeline per block
+
+- get blockId/location from namenode,
+- send data to the first datanode, recv response from the last datanode
+- dataflow and control flow separation
+
+
+
+
+
+du -sb ./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/subdir0/subdir0/blk_1073741831
+1048576	./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/subdir0/subdir0/blk_1073741831
+
+du  -sb ./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/subdir0/subdir0/blk_1073741830_1006.meta
+8199	./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/subdir0/subdir0/blk_1073741830_1006.meta
+
+
+
+- meta file naming convention
+- meta contain crc checksum for each chunk(512Bytes) of data, extra 3 bytes is used for what?
+
