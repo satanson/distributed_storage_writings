@@ -297,3 +297,23 @@ du  -sb ./current/BP-1457023590-192.168.110.10-1512913889667/current/finalized/s
 
 htrace for distributed trace
 
+
+
+# Erasure Coding
+
+
+
+## dataflow pipelining
+
+- checksum per chunk
+- sent by packet
+- data clustered by block
+- replicated by pipelining
+- one-write-more-read
+
+
+
+
+
+
+
