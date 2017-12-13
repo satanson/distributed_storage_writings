@@ -313,7 +313,34 @@ htrace for distributed trace
 
 
 
+Q1: how to implement operation of append?
+
+- create file, write one byte, close the file
+- open the file for appending again, write one byte,  close the file.
+
+Q2: multiple writers write data into the same block, what happens?
+
+- user A open file, then create a packet, wait for a while, until
+- user B open file, assembly a same-size packet and write.
+- after user B receives response from DNs, then user A write its packet.
+
+Q3: how to pick a sequence of data flow?
+
+- whether client or NN determines order of pipeline?
+- what's the meanings of rack-conscious?
+
+Q4: lifetime of block?
+
+- allocate block: allocate a block after the file is created, client ask NN to addBlock
+- NN allocate a block with unique IDs,  pick DNs on which the block resides, But the NN never tell DNs to initialize the block.
+- client write data to block, the block is initialized by client.
+- beginBlock, writeTo,  endBlock,
+
+Q5: there is no need separation of data flow and control flow.
+
+- In GFS, multiple writers in different ranks can write data into block,  each write choose the best path to pipeline data,  so the leader replica need notified to determined sequence of records.
+- but in HDFS, there is no a multiple block.
 
 
 
-
+Q5:  data 
