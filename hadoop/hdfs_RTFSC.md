@@ -353,3 +353,11 @@ mvn-3.3.9 package -Pdist,native,docs -DskipTests -Dtar -Dmaven.javadoc.skip=true
 org.apache.hadoop.hdfs.protocol.AlreadyBeingCreatedException
 
 reopen a file
+
+
+
+CreateFlag.CREATE = O_CREAT|O_EXCL:
+
+CreateFlag.APPEND=O_CREAT|O_APPEND
+
+CreateFlag.OVERWRITE=O_CREAT|O_TRUNC
