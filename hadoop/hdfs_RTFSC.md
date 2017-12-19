@@ -346,7 +346,7 @@ Q5:  data
 
 
 
-
+mvn-3.3.9 package -Pdist,native,docs -DskipTests -Dtar -Dmaven.javadoc.skip=true -pl '!hadoop-cloud-storage-project,!hadoop-client-modules' -DskipShade
 
 
 
