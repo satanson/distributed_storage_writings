@@ -356,8 +356,21 @@ reopen a file
 
 
 
-CreateFlag.CREATE = O_CREAT|O_EXCL:
+CreateFlag.CREATE =O_WRONLY|O_CREAT|O_EXCL
 
-CreateFlag.APPEND=O_CREAT|O_APPEND
+​	can not create a already-existing file
 
-CreateFlag.OVERWRITE=O_CREAT|O_TRUNC
+CreateFlag.APPEND=O_WRONLY|O_APPEND
+
+​	atomic record write, lease mechanism employed
+
+CreateFlag.OVERWRITE=O_WRONLY|O_TRUNC
+
+​	recoverLease, unspecified
+
+
+
+
+
+
+
