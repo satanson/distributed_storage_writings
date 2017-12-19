@@ -342,5 +342,14 @@ Q5: there is no need separation of data flow and control flow.
 - but in HDFS, there is no a multiple block.
 
 
-
 Q5:  data 
+
+
+
+
+
+
+
+org.apache.hadoop.hdfs.protocol.AlreadyBeingCreatedException
+
+reopen a file
