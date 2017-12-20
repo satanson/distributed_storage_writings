@@ -372,6 +372,9 @@ CreateFlag.OVERWRITE=O_WRONLY|O_TRUNC
 
 LeaseRenewer
 
+- LeaseRenwer.Factory.INSTANCE  is a singleton object, which  manages all LeaseRenewers.
+- one (namenode, user)  map to one LeaseRenewer.
+- one LeaseRenewer maps many DFSClient.
 - ​
 
 LeaseManager
