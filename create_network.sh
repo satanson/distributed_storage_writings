@@ -86,6 +86,7 @@ create_network(){
 
 	# enable bridge to exchanging packages from different netns
 	iptables -t nat -A POSTROUTING -s ${subnet}.0/24 ! -o ${bridge} -j MASQUERADE
+	systemctl restart iptables
 
 	for i in $(eval "echo {1..$(($num))}");do
 		local ip="${subnet}.$((1+$i))"
