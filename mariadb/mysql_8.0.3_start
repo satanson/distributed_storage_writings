@@ -1,0 +1,850 @@
+
+
+## 1. compile debug version of mysql_8.0.3
+
+
+
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -rdynamic -fno-inline -Wno-error"
+
+make -j8
+```
+
+- build type: `CMAKE_BUILD_TYPE=Debug`
+- per-config: `CMAKE_CXX_FLAGS_DEBUG`
+- fno-inline: forbid inline function expansion
+- Wno-error: not make all warnings into errors, otherwise building abort early.
+
+
+## 2. start mysqld
+
+[**running-mariadb-from-the-build-directory**](https://mariadb.com/kb/en/library/running-mariadb-from-the-build-directory/)
+
+**write ~/.my.cnf**
+
+- datadir=/home/grakra/data/mysql
+- socket=/home/grakra/data/mysql/sock
+- language=/home/grakra/workspace/mariadb/server/sql/share/english
+- log-error=/home/grakra/data/mysql/error.log
+- general-log=TRUE
+- general-log-file=/home/grakra/data/mysql/general.log
+- slow-query-log=TRUE
+- slow-query-log-file=/home/grakra/data/mysql/slow.log
+
+```
+# Example mysql config file.
+# You can copy this to one of:
+# /etc/my.cnf to set global options,
+# /mysql-data-dir/my.cnf to get server specific options or
+# ~/my.cnf for user specific options.
+# 
+# One can use all long options that the program supports.
+# Run the program with --help to get a list of available options
+
+# This will be passed to all mysql clients
+[client]
+#password=my_password
+#port=3306
+#socket=/tmp/mysql.sock
+
+# Here is entries for some specific programs
+# The following values assume you have at least 32M ram
+
+# The MySQL server
+[mysqld]
+#port=3306
+#socket=/tmp/mysql.sock
+temp-pool
+
+# The following three entries caused mysqld 10.0.1-MariaDB (and possibly other versions) to abort...
+# skip-locking
+# set-variable  = key_buffer=16M
+# set-variable  = thread_cache=4
+
+loose-innodb_data_file_path = ibdata1:1000M
+loose-mutex-deadlock-detector
+gdb
+
+######### Fix the two following paths
+
+# Where you want to have your database
+datadir=/home/grakra/data/mysql
+socket=/home/grakra/data/mysql/sock
+# Where you have your mysql/MariaDB source + sql/share/english
+language=/home/grakra/workspace/mariadb/server/sql/share/english
+log-error=/home/grakra/data/mysql/error.log
+general-log=TRUE
+general-log-file=/home/grakra/data/mysql/general.log
+slow-query-log=TRUE
+slow-query-log-file=/home/grakra/data/mysql/slow.log
+
+########## One can also have a different path for different versions, to simplify development.
+
+#[mariadb-10.1]
+#lc-messages-dir=/my/maria-10.1/sql/share
+
+#[mariadb-10.2]
+#lc-messages-dir=/my/maria-10.2/sql/share
+
+[mysqldump]
+quick
+set-variable = max_allowed_packet=16M
+
+[mysql]
+no-auto-rehash
+
+[myisamchk]
+set-variable= key_buffer=128M
+```
+
+```
+./scripts/mysql_install_db --srcdir=$PWD --datadir=/home/grakra/data/mysql --user=$LOGNAME
+
+sql/mysqld
+
+mysql -S /home/grakra/data/mysql/sock
+```
+## 3. running TPC-C benchmark and generating flumegraph.
+
+[**tpcc-mysql**](https://github.com/Percona-Lab/tpcc-mysql)
+
+```
+mysqladmin -S /home/grakra/data/mysql/sock -uroot create tpcc1000
+
+mysql -S /home/grakra/data/mysql/sock -uroot tpcc1000 < create_table.sql
+
+./tpcc_load -h127.0.0.1 -d tpcc1000 -u root -p "" -w 1000
+```
+
+meanwhile
+
+[**FlameGraph**](https://github.com/brendangregg/FlameGraph)
+
+```
+perf record -F 99 -p $(ps h -C mysqld -o pid) -g -- sleep 60
+perf script > out.perf
+./stackcollapse-perf.pl ../tpcc-mysql/out.perf |./flamegraph.pl >mysql.svg
+google-chrome-stable mysql.svg
+```
+
+## 4. A priori knowledge and guessing
+
+**fact**
+- disk-based and persistent=> call fsync when write WAL log and checkpoint.[must]
+- support several engine=> separated WAL and engine. [maybe]
+- consist of local store, txn CC, process model, query module, buffer pool, catalog, protocol and etc.=> start local store first.
+
+## 5. Ag for fsync
+
+- source code search is not a good way.
+- so use gdb.
+
+## 6. gdb
+
+```
+# enable gdb to attach to a process
+su
+echo 0 > /proc/sys/kernel/yama/ptrace_scope
+exit
+
+# hunt for fsync
+gdb sql/mysqld 23372
+br fsync
+c
+bt
+generate-core-file mysqld_core.23372
+```
+```
+#0  0x00007f80c6eebc60 in fsync () from /usr/lib/libpthread.so.0
+#1  0x00005649da40ecaa in os_file_fsync_posix (file=10)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/os/os0file.cc:2426
+#2  0x00005649da40f0d3 in os_file_flush_func (file=10)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/os/os0file.cc:2542
+#3  0x00005649da65b789 in pfs_os_file_flush_func (file=..., 
+    src_file=0x5649dab77360 "/home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc", src_line=962)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/include/os0file.ic:496
+#4  0x00005649da65f2e2 in fil_flush_low (space=0x5649dc5b4e90)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc:962
+#5  0x00005649da66d53c in fil_flush (space_id=4294967280)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/fil/fil0fil.cc:5528
+#6  0x00005649da3ec138 in log_write_flush_to_disk_low ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1063
+#7  0x00005649da3ecb92 in log_write_up_to (lsn=9832047807, flush_to_disk=true)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1291
+#8  0x00005649da3ecd05 in log_buffer_sync_in_background (flush=true)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/log/log0log.cc:1337
+#9  0x00005649da50cf66 in srv_sync_log_buffer_in_background ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2127
+#10 0x00005649da50d4b1 in srv_master_do_active_tasks ()
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2300
+#11 0x00005649da50ddea in srv_master_thread (arg=0x0)
+    at /home/grakra/workspace/mariadb/server/storage/innobase/srv/srv0srv.cc:2511
+#12 0x00007f80c6ee2049 in start_thread () from /usr/lib/libpthread.so.0
+#13 0x00007f80c42b7f0f in clone () from /usr/lib/libc.so.6
+```
+
+```
+gdb --batch --quiet -ex "thread apply all bt" -ex "quit" sql/mysqld mysqld_core.23372 > mysqld_gdb_stacktrace.dat
+```
+
+```
+./stackcollapse-gdb.pl ../mariadb/server/mysqld_gdb_stacktrace.dat |./flamegraph.pl > mysqld_fsync.svg
+```
+
+```
+pip install gprof2dot
+```
+
+```
+./stacktrace2callgraph_gdb.pl ~/workspace/mariadb/server/mysqld_gdb_stacktrace.dat  |gprof2dot -c print | dot -Tpng -o mysqld_fsync.png
+```
+
+![image](mysqld_fsync.png)
+
+## 7. mariadb architecture
+
+**in thread perspective**
+
+- `mysqld_main`
+
+> 
+- main thread
+- handle_connections_sockets:  listen and accept connection request from clients.
+
+- `handle_one_connection`
+
+> 
+- each client has a corresponding `handle_one_connection` thread for communication.
+- `my_net_read_packet`: recv req message from clients
+- process cmd
+- send resp message to clients
+
+- `io_handler_thread`
+
+> 
+- *aio for network|disk ?*
+
+
+- `buf_flush_page_cleaner_coordinator`
+
+> 
+- manage buffer pool?
+- flush dirty pages to disk
+- swap pre-fetching or on-command pages from disk.
+- evict LRU pages.
+
+
+- `thd_destructor_proxy`
+
+> 
+- reclaim unused threads?
+- can the number of thread scales up as requests grows?
+- catogory threads into daemon and non-daemon ones?
+- the threads associated with a client session and threads for I/O should be non-daemon threads.
+- process model and thread pool management.
+
+- `binlog_background_thread`
+
+> 
+- record binlog
+- is binlog is WAL log?
+
+- `handle_slave_background`
+
+> 
+- for replication?
+
+- `buf_resize_thread`
+
+> 
+- resize the buffer pool to avoid OOM?
+- policy?
+- in-the-fly?
+
+- `buf_dump_thread`
+
+> 
+- why dump buf?
+- for debug propose?
+- for checkpointing propose?
+
+
+
+- `srv_purge_coodinator_thread`
+
+> 
+- unknown?
+
+- `srv_worker_thread`
+
+> 
+- unknown?
+
+- `btr_defragment_thread`
+
+> 
+- btr means B tree?
+- defragment what?
+
+- `srv_error_monitor_thread`
+
+> 
+- monitor error event
+
+- `srv_monitor_thread`
+
+> 
+- monitor non-error thread
+- why not to unit `srv_error_monitor_thread` and `srv_monitor_thread` into one thread?
+
+- `lock_wait_timeout_thread`
+
+> 
+- for deadlock?
+
+- `fts_optimzed_thread`
+
+> 
+-  unknown
+
+-  `dict_stats_thread`
+
+> 
+- unknown
+- catalog
+
+
+- `ma_checkpoint_thread`
+
+> 
+- checkpointing?
+
+- `srv_master_thread`
+
+> 
+- write WAL?
+
+- `timer_handler`
+
+> 
+- timer notification
+
+- `signal_hand`
+
+> 
+- process signal
+
+**in component perspective**
+
+- main component of RDBMS
+
+![image](./main_component.png)
+
+`Hellerstein, J. M., Stonebraker, M., & Hamilton, J. (2007). Architecture of a database system. Foundations and Trends® in Databases, 1(2), 141-259.`
+
+- mysql architecture
+
+>
+- 1979, Monty Widenius, TcX, reporting tool written in BASIC, ran on 4Mhz computer with 16KB RAM.
+
+- , Unireg, rewritten in C and portted to UNIX, low-level storage engine with a reporting front end.
+
+- 1990s, push for SQL interface. 1. load data into a commercial database. 2. borrowing the SQL part from mSQL and integrated with low-level storage engine. 3. "I've had enough of those tools that somebody else wrote that don't work! I'm writing my own".
+
+- May 1996, MySQL1.0, released to a limited group.
+- Oct 1996, MySQL 3.11.1, public release, only a binary distribution for solaris.
+- 1997~1998, portted to other OS as feature set gradually increased.
+- 1998, MySQL MySQL 3.22,  features. 1. a decent subset of SQL lang, 2. sophisticated optimizer, 3. extremely fast, 4. vary stable. 5. multi-lang support. lacked support: 1. transactions, 2. subquery, 3. foreign keys, 4. stored procedures & views, only table-level locking. 
+- 1999~2000, MySQL 3.23, MySQL AB and SleepyCat, SQL interface for Berkeley DB. could never work out all the quirks of the BDB interface, and the BDB tables was never stable. MySQL source became equipped with hooks to add any type of storage engine, including transacional one.
+
+- Apr 2000, , Slashdot, master-slave replication, ISAM(non-txn)->MyISAM(txn), full-text search. Gemini(transactional engine, ended in a lawsuit towards the end of 2001).
+- Oct 2001, MySQL4.0 alpha,  MySQL/InnoDB, Heikki Tuuri, InnoDB, row-level locking.
+- early 2002, MySQL/InnoDB, stable.
+- Mar 2003, MySQL4.0 production stable, query cache, replication code on the slave was rewritten to use two threads, one for network I/O from master, the other to process updates. optimizer improvements. client/server protocol become SSL-capable.
+- April 2003, MySQL4.1 alpha,
+- June 2004, MySQL4.1 beta, subqueries, spatial indexing support was added to MyISAM. Unicode support. more secure client/server protocol. supported prepared statements.
+- Oct 2004, MySQL4.1 stable.
+- Dec 2003, MySQL5.0 alpha, stored procedures, server-side curosrs, tiggers, views, XA -transactions, query optimizer improvement
+- Oct 2005, MySQL5.0 stable.
+- Nov 2005, MySQL5.1 alpha, table data partitioning, row-based replication, event scheduler, standardized plug-in API that facilitates the integration of new storage engines and other plugins.
+
+- 5.0: stable, 5.1: beta, 5.2:new features.
+
+
+
+
+## 8. decomposed table handler and storage engine
+
+
+
+choose the simplest storage engine: `storage/csv`
+
+-  create table: `test.csv_test`
+
+[ref: csv-overview](https://mariadb.com/kb/en/library/csv-overview/)
+
+- set breakpoints on `ha_tina::method` 
+
+```shell
+perl -lne 'print "br $1" if /(ha_tina::\w+\b)/' storage/csv/ha_tina.cc \
+|sort -u |tee mariadb.gdb
+
+
+br ha_tina::chain_append
+br ha_tina::check
+br ha_tina::check_and_repair
+br ha_tina::check_if_incompatible_data
+br ha_tina::close
+br ha_tina::create
+br ha_tina::delete_all_rows
+br ha_tina::delete_row
+br ha_tina::encode_quote
+br ha_tina::external_lock
+br ha_tina::extra
+br ha_tina::find_current_row
+br ha_tina::free_share
+br ha_tina::get_status
+br ha_tina::get_write_pos
+br ha_tina::ha_tina
+br ha_tina::info
+br ha_tina::init_data_file
+br ha_tina::init_tina_writer
+br ha_tina::is_crashed
+br ha_tina::open
+br ha_tina::open_update_temp_file_if_needed
+br ha_tina::position
+br ha_tina::read_meta_file
+br ha_tina::repair
+br ha_tina::reset
+br ha_tina::rnd_end
+br ha_tina::rnd_init
+br ha_tina::rnd_next
+br ha_tina::rnd_pos
+br ha_tina::store_lock
+br ha_tina::update_row
+br ha_tina::update_status
+br ha_tina::write_meta_file
+br ha_tina::write_row
+```
+
+
+
+[dbug](https://dev.mysql.com/doc/refman/5.7/en/dbug-package.html)
+
+```shell
+# enable dbug in cmdline options
+sql/mysqld --console --debug
+
+#field_1:field_2:...:field_N
+#[+|-]flag[,modifier,modifier,...,modifier]
+# d: enable output of DBUG_XXX
+# D,tenth_of_second: delay output
+# i: process/thread ID
+# P: process/thread name
+# F: file name of source file
+# L: line number of source file
+# N: line number of output
+# n: nesting-depth
+# f: function name filter
+# p: thread/pid filter
+# r: no nesting level
+# S: sanity check
+# o: redirect output to file(append), default stderr
+# O: redirect output to file(truncate)
+# enable dbug on-the-fly by using client
+
+mysql> set debug ='t:i:d:o,mysqld.trace'
+mysql> select @@debug;
+mysql> show variables likes "debug";
+mysql> show  variables where Variable_name ="debug";
+
+# print process ID, line number.
+# enable trace and debug
+# redirect to /home/grakra/mysqld.trace, flush between each write
+# only output info associated with functions matched with ha_tina::rnd_init
+mysql> set debug = 'i:t:d:N:O,/home/grakra/mysqld.trace:f,ha_tina\:\:rnd_init';
+
+# also print file name and line number of source file.
+mysql> set debug = 'i:t:d:N:F:L:r:O,/home/grakra/mysqld.trace:f,ha_tina*,handler*,handlerton*';
+
+# shutdown query cache
+mysql> set query_cache_type = 0;
+```
+
+
+
+```shell
+su
+echo 0 > /proc/sys/kernel/yama/ptrace_scope
+gdb sql/mysqld $(ps h -C mysqld -o pid)
+```
+
+
+*CMakeLists.txt*
+
+```cmake
+# set module search path CMAKE_MODULE_PATH to ${CMAKE_SOURCE_DIR}/cmake
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+
+# import cmake/plugin.cmake
+INCLUDE(plugin)
+
+# macro CONFIGURE_PLUGINS defined in cmake/plugin.cmake
+# Add storage engines and plugins.
+CONFIGURE_PLUGINS()
+
+# configure sql/sql_builtin.cc, substitute @mysql_mandatory_plugins@ and @mysql_optional_plugins@
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/sql/sql_builtin.cc.in ${CMAKE_BINARY_DIR}/sql/sql_builtin.cc)
+
+```
+
+
+
+*cmake/plugin.cmake*
+
+```cmake
+
+# set include directories: -Iinclude -Isql -Ipcre ...
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include
+             ${CMAKE_SOURCE_DIR}/sql
+             ${PCRE_INCLUDES}
+             ${SSL_INCLUDE_DIRS}
+             ${ZLIB_INCLUDE_DIR})
+             
+# compile static library: ar rcs lib${target}.a *.o
+ADD_LIBRARY(${target} STATIC ${SOURCES})
+
+# add library -lxxx
+TARGET_LINK_LIBRARIES (${target} ${ARG_LINK_LIBRARIES})
+
+# update mysql_mandatory_plugins or mysql_optional_plugins
+SET (mysql_mandatory_plugins
+    "${mysql_mandatory_plugins} builtin_maria_${target}_plugin,")
+SET (mysql_mandatory_plugins ${mysql_mandatory_plugins} PARENT_SCOPE)
+
+SET (mysql_optional_plugins
+    "${mysql_optional_plugins} builtin_maria_${target}_plugin,")
+SET (mysql_optional_plugins ${mysql_optional_plugins} PARENT_SCOPE)
+
+
+# Add all CMake projects under storage  and plugin 
+# subdirectories, configure sql_builtins.cc
+MACRO(CONFIGURE_PLUGINS)
+    IF(NOT WITHOUT_SERVER)
+        FILE(GLOB dirs_storage ${CMAKE_SOURCE_DIR}/storage/*)
+    ENDIF()
+
+    FILE(GLOB dirs_plugin ${CMAKE_SOURCE_DIR}/plugin/*)
+    FOREACH(dir ${dirs_storage} ${dirs_plugin})
+        IF (EXISTS ${dir}/CMakeLists.txt)
+            ADD_SUBDIRECTORY(${dir})
+        ENDIF()
+    ENDFOREACH()
+
+    GET_CMAKE_PROPERTY(ALL_VARS VARIABLES)
+    FOREACH (V ${ALL_VARS})
+        IF (V MATCHES "^PLUGIN_" AND ${V} MATCHES "YES")
+            STRING(SUBSTRING ${V} 7 -1 plugin)
+            STRING(TOLOWER ${plugin} target)
+            IF (NOT TARGET ${target})
+                MESSAGE(FATAL_ERROR "Plugin ${plugin} cannot be built")
+            ENDIF()
+        ENDIF()
+    ENDFOREACH()
+ENDMACRO()
+```
+
+
+
+*sql/sql_builtin.cc.in, sql/sql_builtin.cc*
+
+```c++
+extern builtin_maria_plugin builtin_maria_csv_plugin ...;
+struct st_maria_plugin *mysql_mandatory_plugins[]= {
+    ...
+    builtin_maria_csv_plugin,
+    ...
+}
+
+```
+
+*storage/csv/ha_tina.cc*
+
+```c++
+maria_declare_plugin(csv)
+{
+  MYSQL_STORAGE_ENGINE_PLUGIN,
+  &csv_storage_engine,
+  "CSV",
+  "Brian Aker, MySQL AB",
+  "CSV storage engine",
+  PLUGIN_LICENSE_GPL,
+  tina_init_func, /* Plugin Init */
+  tina_done_func, /* Plugin Deinit */
+  0x0100 /* 1.0 */,
+  NULL,                       /* status variables                */
+  NULL,                       /* system variables                */
+  "1.0",                      /* string version */
+  MariaDB_PLUGIN_MATURITY_STABLE /* maturity */
+}
+maria_declare_plugin_end;
+```
+
+*`include/mysql/plugin.h`*
+
+```c++
+#define maria_declare_plugin(NAME) \
+MARIA_DECLARE_PLUGIN__(NAME, \
+                 builtin_maria_ ## NAME ## _plugin_interface_version, \
+                 builtin_maria_ ## NAME ## _sizeof_struct_st_plugin, \
+                 builtin_maria_ ## NAME ## _plugin)
+
+#define maria_declare_plugin_end ,{0,0,0,0,0,0,0,0,0,0,0,0,0}}
+
+struct st_maria_plugin
+{
+  int type;             /* the plugin type (a MYSQL_XXX_PLUGIN value)   */
+  void *info;           /* pointer to type-specific plugin descriptor   */
+  const char *name;     /* plugin name                                  */
+  const char *author;   /* plugin author (for SHOW PLUGINS)             */
+  const char *descr;    /* general descriptive text (for SHOW PLUGINS ) */
+  int license;          /* the plugin license (PLUGIN_LICENSE_XXX)      */
+  int (*init)(void *);  /* the function to invoke when plugin is loaded */
+  int (*deinit)(void *);/* the function to invoke when plugin is unloaded */
+  unsigned int version; /* plugin version (for SHOW PLUGINS)            */
+  struct st_mysql_show_var *status_vars;
+  struct st_mysql_sys_var **system_vars;
+  const char *version_info;  /* plugin version string */
+  unsigned int maturity; /* MariaDB_PLUGIN_MATURITY_XXX */
+};
+```
+
+
+
+*storage/csv/CMakeLists.txt*
+
+```cmake
+SET(CSV_SOURCES  ha_tina.cc ha_tina.h transparent_file.cc transparent_file.h)
+MYSQL_ADD_PLUGIN(csv ${CSV_SOURCES} STORAGE_ENGINE MANDATORY)
+```
+
+
+
+**Add a new storage engine named 'foobar' to MariaDB**
+
+1. implementation ha_foobar inherited from handler in storage/foobar/ha_foobar.{cc, h}
+
+2. add codes as follow to ha_foobar.cc
+
+   ```C++
+   #include<my_global.h>
+
+   maria_declare_plugin(foobar)
+   {
+       ...
+   }
+   maria_declare_plugin_end;
+   ```
+
+3. write storage/foobar/CMakeLists.txt
+
+   ```c++
+   MYSQL_ADD_PLUGIN(foobar ha_foobar.cc ...  STORAGE_ENGINE MANDATORY)
+   ```
+
+4. register db type in sql/handler.h
+
+   ```c++
+   # sql/handler.h: 418
+
+   enum legacy_db_type     
+   {     
+     /* note these numerical values are fixed and can *not* be changed */      
+     DB_TYPE_UNKNOWN=0,     
+     DB_TYPE_HEAP=6,     
+     DB_TYPE_MYISAM=9,     
+     DB_TYPE_MRG_MYISAM=10,     
+     DB_TYPE_INNODB=12,     
+     DB_TYPE_EXAMPLE_DB=15,     
+     DB_TYPE_ARCHIVE_DB=16,     
+     DB_TYPE_CSV_DB=17,     
+     DB_TYPE_FEDERATED_DB=18,     
+     DB_TYPE_BLACKHOLE_DB=19,     
+     DB_TYPE_PARTITION_DB=20,     
+     DB_TYPE_BINLOG=21,     
+     DB_TYPE_PBXT=23,     
+     DB_TYPE_PERFORMANCE_SCHEMA=28,     
+     DB_TYPE_ARIA=42,     
+     DB_TYPE_TOKUDB=43,     
+     DB_TYPE_FIRST_DYNAMIC=44,     
+     DB_TYPE_DEFAULT=127 // Must be last      
+   };     
+   ```
+
+
+
+
+----
+
+
+
+**get_new_handler**
+
+```
+#0 get_new_handler at sql/handler.cc:251
+#1 TABLE_SHARE::init_from_binary_frm_image at sql/table.cc:1680
+#2 open_table_def at sql/table.cc:669
+#3 tdc_acquire_share at sql/table_cache.cc:825
+#4 open_table at sql/sql_base.cc:1742
+#5 open_and_process_table at sql/sql_base.cc:3409
+#6 open_tables at sql/sql_base.cc:3926
+#7 open_and_lock_tables at sql/sql_base.cc:4682
+#8 open_and_lock_tables at sql/sql_base.h:493
+#9 plugin_load at sql/sql_plugin.cc:1792
+#10 plugin_init at sql/sql_plugin.cc:1670
+#11 init_server_components at sql/mysqld.cc:5256
+#12 mysqld_main at sql/mysqld.cc:5848
+#13 main at sql/main.cc:25
+```
+
+**register_builtin**
+
+```
+#0  register_builtin (plugin=0x555556e6b240 <builtin_maria_csv_plugin>, tmp=0x7fffffffcf10, ptr=0x7fffffffce40) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1748
+#1  0x0000555555b1a67c in plugin_init (argc=0x5555570415b0 <remaining_argc>, argv=0x5555578ec678, flags=0) at /home/grakra/workspace/mariadb/server/sql/sql_plugin.cc:1621
+#2  0x0000555555a274ab in init_server_components () at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5256
+#3  0x0000555555a28549 in mysqld_main (argc=28, argv=0x5555578ec678) at /home/grakra/workspace/mariadb/server/sql/mysqld.cc:5848
+#4  0x0000555555a1d6ca in main (argc=1, argv=0x7fffffffdc68) at /home/grakra/workspace/mariadb/server/sql/main.cc:25
+```
+
+
+
+```
+(gdb) p builtins
+$4 = (st_maria_plugin **) 0x555556e633d8 <mysql_mandatory_plugins+24>
+(gdb) p builtins[0]@10
+$5 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>}
+(gdb) p builtins[0]@24
+$6 = {0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>, 0x55555662d0d2, 0x1, 0x0}
+(gdb) p mysql_mandatory_plugins
+$7 = 0x555556e633c0 <mysql_mandatory_plugins>
+(gdb) p mysql_mandatory_plugins[0]@24
+$8 = {0x555556e66b20 <builtin_maria_binlog_plugin>, 0x555556e465c0 <builtin_maria_mysql_password_plugin>, 0x555556e62ea0 <builtin_maria_wsrep_plugin>,
+  0x555556e6b240 <builtin_maria_csv_plugin>, 0x555556e6b420 <builtin_maria_heap_plugin>, 0x555556e7e160 <builtin_maria_myisam_plugin>, 0x555556e7e740 <builtin_maria_myisammrg_plugin>,
+  0x555556e82160 <builtin_maria_userstat_plugin>, 0x0, 0x0, 0x0, 0x0, 0x555557065b24 <key_group_mutex>, 0x55555662d0ae, 0x0, 0x555557065b28 <key_timer_mutex>, 0x55555662d0ba, 0x1, 0x0, 
+  0x0, 0x555557065b2c <key_worker_cond>, 0x55555662d0c6, 0x0, 0x555557065b30 <key_timer_cond>}
+(gdb) p mysql_mandatory_plugins[3]@1 
+$9 = {0x555556e6b240 <builtin_maria_csv_plugin>}
+```
+
+
+
+**plugin_init**
+
+1. add plugin from mysql\_{mandatory, optional}\_plugins to plugin\_array and  plugin\_hash
+
+2. call plugin\_initialize to initialize each plugin in plugin\_array.
+
+3. global plugin_type_initialize table has a corresponding entry for each plugin type. and the entry is function pointer or nil, alternatively.
+
+   ```c++
+   // plugin_initialize at sql/sql_plugin.cc:1411 
+     if (plugin_type_initialize[plugin->plugin->type])
+     {
+       if ((*plugin_type_initialize[plugin->plugin->type])(plugin))
+       {    
+         sql_print_error("Plugin '%s' registration as a %s failed.",
+                         plugin->name.str, plugin_type_names[plugin->plugin->type].str);
+         goto err; 
+       }    
+     }
+
+   // plugin_type_initialize at sql/sql_plugin.cc:111
+   plugin_type_init plugin_type_initialize[MYSQL_MAX_PLUGIN_TYPE_NUM]=
+   {
+     0, ha_initialize_handlerton, 0, 0,initialize_schema_table,
+     initialize_audit_plugin, 0, 0, 0, initialize_encryption_plugin
+   };
+
+   // ha_initialize_handlerton at sql/sql_plugin.cc:490
+   int ha_initialize_handlerton(st_plugin_int *plugin)
+   ```
+
+   ​
+
+4. if the entry is function pointer, then invoke it to initialize the plugin.
+
+5. otherwise, call plugin-specific init function if it exists.
+
+6. ​
+
+
+
+
+## 9. port gunit from mysql to mariadb
+
+
+
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -rdynamic -fno-inline -Wno-error" -H. -Bdebug -DENABLE_DOWNLOADS=1 --trace-expand
+```
+
+
+
+```cmake
+#mysql-server#020025d9f277fd3283b8c75024f590857f58fbbd/CMakeLists.txt:332
+MACRO (MY_CHECK_CXX_COMPILER_FLAG FLAG RESULT)
+  SET(SAVE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+  SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${FLAG}")
+  CHECK_CXX_SOURCE_COMPILES("int main(void) { return 0; }" ${RESULT}
+    FAIL_REGEX "argument unused during compilation"
+    FAIL_REGEX "unsupported .*option"
+    FAIL_REGEX "unknown .*option"
+    FAIL_REGEX "unrecognized .*option"
+    FAIL_REGEX "ignoring unknown option"
+    FAIL_REGEX "[Ww]arning: [Oo]ption"
+    FAIL_REGEX "error: visibility"
+    FAIL_REGEX "warning: visibility"
+    )
+  SET(CMAKE_REQUIRED_FLAGS "${SAVE_CMAKE_REQUIRED_FLAGS}")
+ENDMACRO()
+```
+
+
+
+```cmake
+#mariodb/server#c548fb0667ffe71d9387eaec342b1716fc4c9526/cmake/check_compiler_flag.cmake
+
+SET(fail_patterns
+    FAIL_REGEX "argument unused during compilation"
+    FAIL_REGEX "unsupported .*option"
+    FAIL_REGEX "unknown .*option"
+    FAIL_REGEX "unrecognized .*option"
+    FAIL_REGEX "ignoring unknown option"
+    FAIL_REGEX "warning:.*ignored"
+    FAIL_REGEX "warning:.*is valid for.*but not for"
+    FAIL_REGEX "warning:.*redefined"
+    FAIL_REGEX "[Ww]arning: [Oo]ption"
+    )   
+
+MACRO (MY_CHECK_C_COMPILER_FLAG flag)
+  STRING(REGEX REPLACE "[-,= +]" "_" result "have_C_${flag}")
+  SET(SAVE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+  SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${flag}")
+  CHECK_C_SOURCE_COMPILES("int main(void) { return 0; }" ${result}
+    ${fail_patterns})
+  SET(CMAKE_REQUIRED_FLAGS "${SAVE_CMAKE_REQUIRED_FLAGS}")
+ENDMACRO()
+```
+
+
+
+could not find load file
+
+```
+{lz4,lzo,lzma,bzip2,snappy}.cmake
+```
+

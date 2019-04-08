@@ -1,0 +1,476 @@
+# MySQL Test
+
+MySQL test framework
+
+- driver, programs: run test cases, verify result.
+- test script language: create test cases.
+- test cases
+- mostly of SQL statements, verifying that MySQL Server and its client programs operate according to expectations. 
+- ​
+
+
+
+**programs**
+
+- mysql-test/mysql-test-run.pl:  mtr(symlink in the same directory) for short.  run test suite.
+- mysqld: mtr start/restart mysqld with different arguments.
+- mysqltest: mtr invoke mysqltest to read test case file in, interpret, and send SQL statement to server.
+
+**test cases**
+
+- mysql-test/t/${testcase}.test:  test case stored in separated files with suffix ".test", input of mysqltest
+- mysql-test/r/${testcase}.result: expected result for each corresponding test case with the same basename. 
+- mysql-test/var/log: the diff between actual and expected result stored in this directory with suffix ".reject".
+
+
+
+**mysql-test-run.pl**
+
+- --ssl-xxx: enable mysqld to accept SSL connections.
+
+- ```
+  ./mysql-test-run.pl test_name
+  ```
+
+**report bug**
+
+- ```
+  ./mysql-test-run.pl test_name
+  ```
+
+- ```
+   cmake -DWITH_DEBUG
+   mysql-test-run.pl --debug test_name
+   # mysql-test/var/tmp/master.trace
+   ```
+
+- ```mysql-test-run.pl --force```
+
+- ```
+  mysql-test-run.pl --gdb test_name
+  ```
+
+- ```
+  # run test suite
+  ./mysql-test-run.pl --force --suite=binlog
+  ```
+  [mysql-test-run.pl options](https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_MYSQL_TEST_RUN_PL.html)
+
+- ```
+  ./mysql-test-run.pl --do-test=prefix
+  ```
+
+- ```
+  test case files is a mix of commands that the mysqltest programs understands and SQL statements. 
+
+  mtr start server or servers as needed, use ports int the range 13000 by default.
+  ```
+
+- run tests in parallel
+
+  ```
+  run several mysqltest instance should use different log dir, --vardir.
+
+  run multi-thread in a single mtr use --parallel
+  --parallel=auto: pick a value automaticlly.
+  environment MTR_PARALLEL
+  ```
+
+
+
+**writing test cases**
+
+- test case: a separated test file
+- test case: contain test sequence, a number of individual tests that are grouped together in the same test file.
+- command: input test that mysqltest recognizes and executable itself.
+- statement: an SQL statement sent to MySQL server to be executed.
+- ​
+
+
+
+
+
+**unit test**
+
+- ```
+  # top-level Makefile
+  # invoke executable with "-t" suffix, recursively
+  make test-unit
+  ```
+
+
+
+**Unit Testing Using TAP**
+
+
+
+**TAP**: Test Anything Protocol, from Perl
+
+**unittest/mytap**: MyTAP protocol code
+
+**xxx-t.c**: base name  of test case file having suffix "-t"
+
+
+
+**TAP**
+
+- plan(num)
+
+  ```
+  #: expected number of tests to run
+  no_plan: use done_test to issue a plan when finish running tests.
+  skip_all: not run any tests
+  ```
+
+- assertion
+
+  ```
+  ok($got, $testname)
+
+  is/isnt($got, $expected, $test_name)
+  not ok ${testnumber} - ${testname}
+  #   Failed test ${testname}
+  #   at ${filename} line ${linenumber}.
+  #          got: ${got}
+  #     expected: ${expected}
+
+  like/unlike( $got, qr/expected/, $test_name )
+
+  cmp_ok( $got, $op, $expected, $test_name )
+
+  can_ok($module, @methods)
+  isa_ok($object,   $class, $object_name)
+  new_ok( $class );
+  subtest $name => \&code, @args;
+  pass($test_name);
+  fail($test_name);
+  require_ok($module);
+  BEGIN { use_ok($module); }
+  is_deeply( $got, $expected, $test_name );
+
+  diag(@diagnostic_message);
+  note(@diagnostic_message);
+  my @dump = explain @diagnostic_message;
+  SKIP: something the user might not be able to do
+  TODO: something the programmer hasn't done yet
+
+  BAIL_OUT: test fail with exit code 255
+
+  exit code
+  0                   all tests successful
+  255                 test died or all passed but wrong # of tests run
+  any other number    how many failed (including missing or extras)
+  ```
+
+​ **tap specs**
+
+- version  `TAP version 13`
+- plan `1..n`
+  - first line: `plan(n)`
+  - last line: `done_testing(n)`
+  - skip_all: `1..n # skip`,  `qr/^1..\d+\s+#\s*skip.*$/i`  skip is case-insensitive
+  - no_plan: 1..n absent
+- test
+  - `qr/^(not )?ok(\s+\d+)?(\s+[^#\n\r]+)?(#\s*(TODO|SKIP).*)?$/i`
+  - one mandatory component: ok, not ok
+  - three optional components: test number,  description, directive
+  - directive: TODO, SKIP 
+- comment/diagnostic
+  - `qr/^#.*$/`
+- directive
+  - TODO
+  - SKIP
+- yaml
+  - first line: `<indent>---`
+  - last line: `<indent>...`
+  - --- and ... surround yaml data
+- bailout
+  - `Bail out!`
+
+
+
+failed TODO tests was not taken into account when aggregating test results.
+
+SKIP tests will be passed if  they are skipped.
+
+
+
+TAP is text-based interface between testing modules
+
+[C++ Tap testing](http://testanything.org/testing-with-tap/c-plus-plus.html)
+
+
+```c++
+#include <tap++/tap++.h>
+#include <string>
+using namespace TAP;
+void plan(int number_of_tests);
+void plan(skip_all, const std::string& reason="");
+void plan(no_plan);
+void done_testing();
+void done_testing(int number_of_tests);
+
+bool ok(bool condition, const std::string& test_name = "");
+template<typename T, typename U> bool
+    is(  const T& got, const U& expected, std::string& test_name = "");
+template<typename T, typename U> bool
+    isnt(  const T& got, const U& expected, std::string& test_name = "");
+
+bool pass(const std::string& test_name = "");
+bool fail(const std::string& test_name = "");
+void skip(int number, const std::string& reason = "");
+diag(diagnostic_message...);
+note(diagnostic_message...);
+void set_output(std::ofstream& new_output);
+void set_error(std::ofstream& new_error);
+
+exit_status()
+0                   all tests successful
+255                 test died or all passed but wrong # of tests runany 
+other number        how many failed (including missing or extras)
+
+int exit_status();
+void bail_out(const std::string& reason);
+```
+
+
+**Unit Testing Using the Google Test Framework**
+
+- xUnit
+- JUnit-style XML
+- Hudson
+
+
+
+- debug info
+- assertion, user-defined predicate assertion
+- value/type-parameterized tests
+- test event listener API
+- test filtering/shuffling
+
+
+
+- TEST(), TEST_F()
+
+
+
+**in action**
+
+- build
+
+  ```
+  git clone https://github.com/google/googletest.git
+  git checkout release-1.8.0
+  mkdir build && cd build && cmake ../
+  make
+  ```
+```
+
+- write a script `compile.sh`
+
+​```shell
+#!/bin/bash
+
+export GTEST_ROOT=/home/grakra/workspace/googletest
+#include<gtest/gtest.h>
+#include<gtest/gmock.h>
+FLAGS="-I${GTEST_ROOT}/googlemock/include \
+	-I${GTEST_ROOT}/googletest/include \
+	-L${GTEST_ROOT}/build/googlemock/gtest \
+	-L${GTEST_ROOT}/build/googlemock"
+
+LIBS="$(eval 'echo -l{gmock,gmock_main,gtest,gtest_main}') -lpthread"
+
+files=$*
+[ -z "$files" ] && files=$(echo *.cc)
+
+for f in $files;do
+	ff=$(echo $f |perl -ne 'print $1 if m{^(?:.*/)?([^/]+)$}')
+	t=${ff%%.cc}
+	[ "${ff}" = "$t" ] && continue
+	echo g++ $FLAGS -o $t $f $LIBS
+	g++ $FLAGS -o $t $f $LIBS
+done
+```
+
+- try TEST (without test fixture) and write `etudes0.cc`
+
+```c++
+#include<gtest/gtest.h>
+
+int add(int a, int b){return a+b;}
+
+TEST(AddTestCase, AddZeroAndZero){
+	EXPECT_EQ(0, add(0,0))<<"add(0,0)==0";
+}
+
+TEST(AddTestCase, AddZeroAndOne){
+	EXPECT_EQ(1, add(0,1))<<"add(0,1)==1";
+}
+
+TEST(AddTestCase, AddTwoAndOne){
+	EXPECT_EQ(1, add(2,1))<<"add(2,1)==1";
+}
+
+```
+
+
+
+- try TEST_F(with test fixture) and write etudes1.cc
+
+```c++
+#include<iostream>
+#include<string>
+using namespace std;
+#include<gtest/gtest.h>
+
+int add(int a, int b){return a+b;}
+
+class  AddTestCase: public ::testing::Test{
+public:
+	AddTestCase(){
+		cout << "AddTestCase ctor"<<endl;
+	}
+	~AddTestCase(){
+		cout << "AddTestCase dtor"<<endl;
+	}
+	void SetUp(){
+		cout << "SetUp" <<endl;
+	}
+	
+	void TearDown(){
+		cout << "TearDown" <<endl;
+	}
+};
+
+TEST_F(AddTestCase, AddZeroAndZero){
+	EXPECT_EQ(0, add(0,0))<<"add(0,0)==0";
+}
+
+TEST_F(AddTestCase, AddZeroAndOne){
+	EXPECT_EQ(1, add(0,1))<<"add(0,1)==1";
+}
+
+TEST_F(AddTestCase, AddTwoAndOne){
+	EXPECT_EQ(1, add(2,1))<<"add(2,1)==1";
+}
+
+```
+
+- compile and run tests
+
+```
+./compile.sh
+# for help
+./etudes0 -h
+# list all tests
+./etudes0 --gtest_list_tests
+# run all tests
+./etudes0
+# run tests match regex
+./etudes0 --gtest_filter=AddTestCase.AddTwoAndOne
+```
+
+
+
+**gtest basic**
+
+- see [gtest primer](https://github.com/google/googletest/blob/master/googletest/docs/Primer.md)
+
+
+- test:  `TEST/TEST_F(testCaseName, testName)`, 
+
+  ```
+  A test is an individual void function defined by TEST or TEST_F,
+  a test has unique full name consists of test case name and test name,
+  both of which are valid c identifiers containing no underscore.
+  ```
+
+- test case: related tests grouped together to share the same data or functions
+
+  ```
+  A test case is a set of related tests with the same test case name,
+  tests in a test case may have a common test fixture,
+  which do some precondition and postcondition processing,
+  ```
+
+- test fixture:
+
+  ```
+  A test fixture is a class derived from ::testing::Test publicly,
+  tests with fixture defined by TEST_F and the test case name must be fixture name.
+  test fixtures has ctor/SetUp and dtor/TearDown to do precondition and postcondition processing.
+  tests are performed on isolated objects of test fixtures,
+  so do not warry about one test's result affects another's
+  ```
+
+- assertion:  `{ASSERT,EXPECT}_*()<<"diagnostic message"`
+
+  ```
+  1. {ASSERT,EXPECT}_{EQ,NE,LT,GT,LE,GE,TRUE,FALSE}
+  2. {ASSERT,EXPECT}_STR{EQ,NE,CASEEQ,CASENE} for c string
+  3. ASSERT abruptly returns, while EXPECT keep going upon failures
+  4. for builtins, class has overloaded operator "==", "<" ">" and "<<", assertion work well.
+  5. for user-defined class, user must provide comparison operator and stream operator, since v1.6.0, gtest provides try-the-best default stringify function.
+  6. for pointer, assertion just compare addresses of pointers, it works unexpectedly for c string.
+  7. for c string, use {ASSERT,EXPECT}_STR{EQ,NE,CASEEQ,CASENE}
+  ```
+
+  ​
+
+- misc
+
+  ```
+  1. invoke InitGoogleTest and RUN_ALL_TESTS in main function
+  2. InitGoogleTest must invoked before RUN_ALL_TESTS
+  3. must invoke RUN_ALL_TESTS once and return its result.
+
+  int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+  }
+
+  4. not write main function, but link libgtest_main instead for common cases.
+  ```
+
+  ​
+
+
+
+**mysql-8.0.3**
+
+```diff
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 20c829bcc6b..3d0605ccaad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -417,7 +417,7 @@ ENDIF()
+ 
+ 
+ # Always enable debug sync for debug builds.
+-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC")
++SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC -g -O0 -rdynamic -fno-inline -Wno-error")
+ SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DENABLED_DEBUG_SYNC")
+  
+ # Older versions of ccache must be disabled: export CCACHE_DISABLE=1
+
+```
+
+
+
+```shell
+cmake -DCMAKE_BUILD_TYPE=Debug  -DENABLE_DOWNLOADS=1 -H. -Bdebug
+```
+
+```
+cd debug && make test-unit
+```
+
+```
+debug/runtime_output_directory/{merge,large}_small_tests-t
+```
+
+
+
+
+
